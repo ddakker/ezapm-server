@@ -35,9 +35,8 @@ war {
 
 
 repositories {
-	maven {
-		url 'http://verify.ezwel.com/nexus/content/groups/public/'
-	}
+	maven { url mavenRepositoryUrl + "/content/groups/public/" }
+	mavenCentral()
 }
 
 dependencies {
