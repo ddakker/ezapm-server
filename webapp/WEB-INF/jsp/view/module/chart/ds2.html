@@ -1,0 +1,170 @@
+<div id="chartDS" style="min-width: 100%; height: 100%; margin: 0 auto"></div>
+<script src="jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script>
+
+$(function () {    
+	chart1 = new Highcharts.Chart({
+        chart: {
+        	renderTo: 'chartDS',
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            marginRight: 10,
+            /* events: {
+                load: function () {
+
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    setInterval(function () {
+                        var x = (new Date()).getTime(), // current time
+                        	CU1 = Math.floor(Math.random() * 100) + 0,
+                        	WS1 = Math.floor(Math.random() * 100) + 0;
+                        var seriesData = {}
+                        seriesData.CU1 = CU1;
+                        seriesData.WS1 = WS1;
+                        series.addPoint([x, seriesData], true, true);
+                    }, 1000);
+                }
+            } */
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: 'Value'
+            },
+            min: 0,
+            max: 100,
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        /* tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 2);
+            }
+        }, */
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        plotOptions: {
+            spline: {
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 2
+                    }
+                },
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+        series: [{
+            name: 'CU1',
+            data: [{x: 4370774346036000, y: 30}, 
+                   {x: 4370774346037000, y: 80},
+                   {x: 4370774346038000, y: 10},
+                   {x: 4370774346039000, y: 0},
+                   {x: 4370774346040000, y: 50}]
+          },
+          {
+              name: 'WS1',
+              data: [{x: 4370774346036000, y: 30}, 
+                     {x: 4370774346037000, y: 80},
+                     {x: 4370774346038000, y: 10},
+                     {x: 4370774346039000, y: 0},
+                     {x: 4370774346040000, y: 50}]
+            }]
+        //data: seriesData
+    });
+	
+	var t = 4370774346041000;
+	/* setInterval(function () {
+    	t+=1000
+    	chart1.series[0].addPoint([t, Math.floor(Math.random() * 100)], true, true);
+	}, 2000); */
+	var data = [{x: 4370774346036000, y: 30}, 
+               {x: 4370774346037000, y: 80},
+               {x: 4370774346038000, y: 10},
+               {x: 4370774346039000, y: 0},
+               {x: 4370774346040000, y: 50}]
+	setInterval(function () {
+    	t+=1000
+    	data.shift()
+    	data.push({x: t, y: Math.floor(Math.random() * 100)});
+    	chart1.series[0].setData(data, true);
+	}, 2000);
+	
+	var data2 = [{x: 4370774346036000, y: 30}, 
+	               {x: 4370774346037000, y: 80},
+	               {x: 4370774346038000, y: 10},
+	               {x: 4370774346039000, y: 0},
+	               {x: 4370774346040000, y: 50}]
+	var t2 = 4370774346041000;
+	setInterval(function () {
+    	t2+=1000
+    	data2.shift()
+    	data2.push({x: t2, y: Math.floor(Math.random() * 100)});
+    	chart1.series[1].setData(data2, true);
+	}, 2000);
+	
+	
+	/* var tt = 4370774346041400;
+	setInterval(function () {
+    	t+=1000
+    	chart1.series[1].addPoint([t, Math.floor(Math.random() * 100)], true, true);
+	}, 2000); */
+	
+	/* chart1 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'chartDS',
+            type: 'spline'
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            categories: ['Apples', 'Bananas', 'Oranges']
+        },
+        yAxis: {
+            title: {
+                text: 'Fruit eaten'
+            }
+        },
+        series: [{
+            name: 'Jane',
+            data: [1, 0, 4]
+        }, {
+            name: 'John',
+            data: [5, 7, 3]
+        }]
+    });
+	
+	setInterval(function () {
+		data = chart1.series[0].data;
+		console.log(data);
+    	data.push(Math.floor(Math.random() * 100));
+    	chart1.series[0].addPoint(data, true, true);
+    	
+    	data = chart1.series[1].data;
+    	data.push(Math.floor(Math.random() * 100));
+    	chart1.series[0].addPoint(data, true, true);
+    	//console.log(data.length)
+    }, 1000); */
+});
+
+</script>
