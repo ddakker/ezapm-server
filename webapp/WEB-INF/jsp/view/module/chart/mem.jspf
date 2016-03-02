@@ -1,0 +1,114 @@
+<%@page pageEncoding="UTF-8"%>
+
+
+
+<div id="chartMem" style="min-width: 100%; height: 100%; margin: 0 auto"></div>
+<script>
+	function pushMemoryChart(data) {
+		//console.log(data);
+	}
+	
+	
+	$(document).ready(function () {
+		var chartMemOpt = Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+		
+        
+        var seriesData = [],
+        time = (new Date()).getTime(),
+	        i;
+	
+	    for (i = -19; i <= 0; i += 1) {
+	    	seriesData.push({
+	            x: time + i * 1000,
+	            CU1: Math.floor(Math.random() * 100) + 0, 
+	            WS1: Math.floor(Math.random() * 100) + 0
+	        });
+	    }
+	    console.log(seriesData)
+        
+	    var data = [],
+                        time = (new Date()).getTime(),
+                        i;
+
+                    for (i = -19; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 1000,
+                            y: Math.floor(Math.random() * 100) + 0
+                        });
+                    }
+
+			var chartMem = $('#chartMem').highcharts({
+            chart: {
+            	
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                /* events: {
+                    load: function () {
+
+                        // set up the updating of the chart each second
+                        var series = this.series[0];
+                        setInterval(function () {
+                            var x = (new Date()).getTime(), // current time
+                            	CU1 = Math.floor(Math.random() * 100) + 0,
+                            	WS1 = Math.floor(Math.random() * 100) + 0;
+                            var seriesData = {}
+                            seriesData.CU1 = CU1;
+                            seriesData.WS1 = WS1;
+                            series.addPoint([x, seriesData], true, true);
+                        }, 1000);
+                    }
+                } */
+            },
+            title: {
+                text: ''
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                min: 0,
+                max: 100,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Random data',
+                data: data
+            }]
+            //data: seriesData
+        });
+        console.log(chartMemOpt)
+	    /* setInterval(function () {
+	    	data.push({
+                x: (new Date()).getTime() * 1000,
+                y: Math.floor(Math.random() * 100) + 0
+            });
+	    	console.log(data.length)
+	    }, 1000); */
+    });
+</script>

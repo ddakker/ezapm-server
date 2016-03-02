@@ -1,0 +1,243 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+
+ext {
+    javaVersion 	= '1.8'
+	servletVersion 	= '3.1'
+    javaEncoding 	= 'UTF-8'
+	gradleVersion	= '2.5'
+	springVersion 	= '4.1.4.RELEASE'
+	//ezwelVersion	= '2.0.1071-SNAPSHOT'
+	ezwelVersion	= '+'
+	targetServer = project.hasProperty('target') ? project.getProperty('target') : 'local'
+}
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+webAppDirName = 'webapp'
+
+version = '1.0.0-SNAPSHOT'
+war {
+    archiveName = "${baseName}.${extension}"
+    manifest {
+        attributes 	'Implementation-Title': archivesBaseName,
+        			'Implementation-Version': version,
+        			'Build-SVN-Version': getRevision(),
+        			'System-JDK': "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
+        			'Build-JDK-Version': javaVersion,
+        			'Gradle-Version': GradleVersion.current().getVersion(),
+        			'Created-By': 'ddakker@ezwel.com',
+        			'Create-Date': new Date().format('yyyy-MM-dd HH:mm:ss').toString()
+    }
+}
+
+
+repositories {
+	maven {
+		url 'http://verify.ezwel.com/nexus/content/groups/public/'
+	}
+}
+
+dependencies {
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	providedCompile "javax.servlet.jsp:javax.servlet.jsp-api:2.2.1"
+	
+	compile "com.ezwel:ezwel-core-framework:$ezwelVersion"
+	compile "com.ezwel:ezwel-core-support:$ezwelVersion"
+	compile "com.ezwel:ezwel-core-tag:$ezwelVersion"
+	//compile "com.ezwel:ezwel-core-security:$ezwelVersion"
+	//compile "com.ezwel:ezwel-core-ehcache:$ezwelVersion"
+	//compile "com.ezwel:ezwel-core-redis:$ezwelVersion"
+	//compile "com.ezwel:ezwel-core-ispn:$ezwelVersion"
+	//compile "com.ezwel:ezwel-core-rabbitmq:$ezwelVersion"
+
+    compile 'org.projectlombok:lombok:1.3'
+	
+	
+	testCompile "junit:junit:4.11"
+	testCompile "org.hamcrest:hamcrest-all:1.3"
+	testCompile "org.springframework:spring-test:$springVersion"
+}	
+
+configurations {
+	// logback 사용[commons-logging 의존성 제거]
+	all*.exclude group: 'commons-logging', module: 'commons-logging'
+	all*.exclude group: 'org.hamcrest', module: 'hamcrest-core'
+	all*.exclude group: 'log4j', module: 'log4j'
+	all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	all*.exclude group: 'org.slf4j', module: 'slf4j-simple'
+}
+
+// 인코딩
+[compileJava, compileTestJava]*.options*.encoding = javaEncoding
+
+eclipse {
+	wtp {
+		component {
+			contextPath = 'apm'
+		}
+		facet {
+			facet name: 'jst.web', version: servletVersion
+			facet name: 'jst.java', version: javaVersion
+		}
+	}
+}
+
+sourceSets {
+	if( "$targetServer" != "local" ){
+		copy {
+			from("src/main/resources/properties-$targetServer"){
+				exclude 'logback.xml'
+			}
+			into "src/main/resources/properties"
+		}
+		copy {
+			from("src/main/resources/properties-$targetServer"){
+				include 'logback.xml'
+			}
+			into("src/main/resources/")
+		}
+		delete file("src/main/resources/properties-dev")
+		delete file("src/main/resources/properties-stage")
+		delete file('src/main/resources/properties-real')
+	}
+}
+
+// src/main/java에 위치한 non java 파일을 output 디렉토리로 복사
+processResources {
+	from('src/main/java') {
+		include '**/*.xml'
+	}
+	into 'build/classes'
+	includeEmptyDirs = true
+}
+
+// src/main/java에 위치한 non java 파일을 output 디렉토리로 복사
+processTestResources {
+	from('src/test/java') {
+		include '**/*.xml'
+	}
+
+	into 'build/classes'
+
+	includeEmptyDirs = true
+}
+
+
+apply plugin: 'js'
+apply plugin: 'css'
+buildscript {
+    repositories {
+    	jcenter()
+    }
+    dependencies {
+       classpath 'com.eriwen:gradle-js-plugin:1.12.1'
+       classpath 'com.eriwen:gradle-css-plugin:1.11.1'
+    }
+}
+
+javascript.source {
+	def targetDir = "$project.projectDir" + File.separatorChar + "webapp" + File.separatorChar + "resources" + File.separatorChar + "js"
+    dev {
+        js {
+            srcDir targetDir
+            include "**/*.js"
+            exclude "**/*.min.js"
+        }
+    }
+}
+css.source {
+	def targetDir = "$project.projectDir" + File.separatorChar + "webapp" + File.separatorChar + "resources" + File.separatorChar + "css"
+    dev {
+        css {
+            srcDir targetDir
+            include "**/*.css"
+            exclude "**/*.min.css"
+        }
+    }
+}
+
+javascript.source.dev.js.files.eachWithIndex { jsFile, i ->
+	tasks.create(name: "minifyJs${i}", type: com.eriwen.gradle.js.tasks.MinifyJsTask) {
+		source 	= jsFile
+		dest 	= jsFile
+		//dest = jsFile.getAbsolutePath().replace('.js', '.min.js')
+	}
+}
+task allMinifyJs(dependsOn: tasks.matching { Task task ->
+		if( "$targetServer" != "local" ){
+			task.name.startsWith("minifyJs")
+		}
+	}
+)
+
+css.source.dev.css.files.eachWithIndex { cssFile, i ->
+	tasks.create(name: "minifyCss${i}", type: com.eriwen.gradle.css.tasks.MinifyCssTask) {
+		source 	= cssFile
+		//dest 	= cssFile
+    	dest = cssFile.getAbsolutePath().replace('.css','.min.css')
+    	
+    	yuicompressor {
+    		lineBreakPos = -1
+    	}
+    }
+}
+task allMinifyCss(dependsOn: tasks.matching { Task task ->
+		if ( "$targetServer" != "local" ){
+			task.name.startsWith("minifyCss")
+		}
+	}
+)
+
+def getRevision() {
+	try {
+		if ( "$targetServer" != "local" ){
+			def stdout = new ByteArrayOutputStream()
+			exec {
+				executable = "svn"
+				args = ["info"]
+				standardOutput = stdout
+			}
+
+			if (stdout.toString().trim().indexOf('E155036') > -1) {	// 버전 문제 시
+				exec {
+					executable = "svn"
+					args = ["upgrade"]
+					standardOutput = stdout
+				}
+
+				exec {
+					executable = "svn"
+					args = ["info"]
+					standardOutput = stdout
+				}
+			}
+
+
+			def output = stdout.toString().trim()
+			def matchLastChangedRev = output =~ /마지막 수정 리비전: (\d+)/
+			if (matchLastChangedRev.count != 1) {
+				matchLastChangedRev = output =~ /Last Changed Rev: (\d+)/
+			}
+			def revision = matchLastChangedRev[0][1]
+
+			return revision as int
+		} else {
+			return 0;
+		}
+	} catch(e) {
+		return -1;
+	}
+}
+
+
+configurations.all {
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+task wrapper(type: Wrapper) {
+	description = 'Generates gradlew[.bat] scripts'
+	gradleVersion = gradleVersion
+}

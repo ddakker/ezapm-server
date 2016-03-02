@@ -1,0 +1,13 @@
+<%@page pageEncoding="UTF-8"%>
+xview chart
+<table border=1 height="150">
+	<tr>
+		<td valign="bottom">
+			<div style="width: 10px; height:10px; background-color: red">.</div>
+			<div style="width: 10px; height:10px; background-color: red">.</div>
+			<div style="width: 10px; height:10px; background-color: red">.</div>
+			<div style="width: 10px; height:10px; background-color: red">.</div>
+			
+		</td>
+	</tr>
+</table>

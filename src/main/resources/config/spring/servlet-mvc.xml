@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+					        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+					        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+					        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+					        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+	<!-- 환경설정 기본정보를 globals.properties 에서 참조하도록 propertyConfigurer 설정  -->
+	<bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:properties/globals-properties.xml</value>
+            </list>
+        </property>
+    </bean>
+
+	<mvc:annotation-driven />
+
+    <context:component-scan base-package="com.ezwel" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+    </context:component-scan>
+
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+	
+    <mvc:interceptors>
+    	<!-- 공통 인터셉터 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**"/>
+			<bean class="com.ezwel.core.framework.web.interceptor.ApplicationInterceptor" />
+		</mvc:interceptor>
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**" />
+			<bean class="com.ezwel.sample.intercepter.SSOInterceptor" />
+		</mvc:interceptor> -->
+	</mvc:interceptors>
+
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+    	<property name="order" value="2" />
+	    <property name="contentNegotiationManager">
+	        <bean class="org.springframework.web.accept.ContentNegotiationManager">
+	        	<constructor-arg>
+		            <bean class="org.springframework.web.accept.HeaderContentNegotiationStrategy" />
+	            </constructor-arg>
+	        </bean>
+	    </property>
+	    <property name="defaultViews">
+	        <list>
+	        	<!-- JSON View -->
+	            <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+	            <!-- JSONP View -->
+	            <bean class="com.ezwel.core.framework.web.servlet.view.json.MappingJsonpView" />
+
+	            <!-- XML View -->
+	            <bean class="com.ezwel.core.framework.web.servlet.view.xml.MappingXmlView" />
+	        </list>
+	    </property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="1" />
+	</bean>
+	<bean name="excelView" class="com.ezwel.core.framework.web.servlet.view.excel.ExcelView" />
+
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name="order" value="3" />
+        <property name="prefix" value="/WEB-INF/jsp/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <aop:aspectj-autoproxy />
+
+	<bean id="loggingAspect" class="com.ezwel.core.framework.web.interceptor.aspect.LoggingAspect" />
+
+	<aop:config proxy-target-class="true">
+
+		<aop:aspect id="aspectLoggging" ref="loggingAspect">
+			<aop:pointcut id="controllerPointcut" expression="execution(* com.ezwel..*Act.*(..))" />
+			<aop:around method="controllerAround" pointcut-ref="controllerPointcut"  />
+		</aop:aspect>
+
+
+	</aop:config>
+</beans>
