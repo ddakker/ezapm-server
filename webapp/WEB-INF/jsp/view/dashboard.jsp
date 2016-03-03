@@ -8,7 +8,7 @@
 	
 	<input type="text" id="input" />
 	<script>
-		var IS_DUMMY_DATA = false;
+		var IS_DUMMY_DATA = true;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 		
 		if (IS_DUMMY_DATA == false) {
@@ -56,7 +56,7 @@
 					data.push(WU1);
 					data.push(WS1);
 					
-					memPushChart(data);
+					//memPushChart(data);
 					
 				}
 			}, 1000);
@@ -64,7 +64,6 @@
 			setInterval(function(){
 				var mem_per = Math.floor(Math.random() * 100) + 0;
 				if (typeof spdmtPushChart == "function") {
-					
 					var startTime = (new Date()).getTime();
 					var data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , sessionId: 'FEDE85678952F8190570845E12D5E7D7' , uri: '/bg-middle.png' , ip: '127.0.0.1' , stTime: '" + startTime + "' }}";
 					spdmtPushChart(data);
@@ -83,7 +82,7 @@
 	        <div class="panel panel-primary">
 	        	<div class="panel-heading"><spring:message code="tit.panel.speedMeter"/></div>
                 <div class="panel-body">
-                    <div style="height: 200px"><%@ include file="/WEB-INF/jsp/view/module/chart/speedMeter.jspf" %></div>
+                    <div style="height: 200px"><%@ include file="/WEB-INF/jsp/view/module/chart/spdmt.jspf" %></div>
                 </div>
             </div>
 	    </div>
