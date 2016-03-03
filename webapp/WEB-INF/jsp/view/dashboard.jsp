@@ -3,46 +3,76 @@
 
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-
+	<script src="/resources/js/vertx/sockjs-0.3.4.js"></script>
+	<script src="/resources/js/vertx/vertx-eventbus.js"></script>
+	
+	<input type="text" id="input" />
 	<script>
-		var IS_DUMMY_DATA = true;		
+		var IS_DUMMY_DATA = false;
+		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 		
 		if (IS_DUMMY_DATA == false) {
-			var BUS_SOCKJS_CLIENT = "bus.sockjs.client";	
+			var BUS_SOCKJS_CLIENT = "bus.sockjs.client";
+			var BUS_SOCKJS_SERVER = "bus.sockjs.server";
+			
 			var eb = new EventBus("http://localhost:9090/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
-					console.log("msg.body: " + msg.body);
+					//console.log(msg.body)
+					if (typeof memPushChart == "function") { 
+						memPushChart(msg.body);
+					}
 				});
 			};
-			function send(event) {
-				if (event.keyCode == 13 || event.which == 13) {
-					var message = $('#input').val();
-					if (message.length > 0) {
-						eb.publish("chat.to.server", message);
-						$('#input').val("");
-					}
-				}
+			function send() {
+				eb.publish(BUS_SOCKJS_SERVER, "aaaa");
 			}
+			//send();
 		} else {
-			setInterval(function(){
-				var mem_per = Math.floor(Math.random() * 100) + 0;
-				var data = "{grp: 'grp_was_mem', data: {serverNm: '', heapUsedPercent: '" + mem_per + "', heapMax: '1882718208', heapUsed: '326188032', nonHeapUsed: '25639144', time: '1456733298864'}}";
-				var jsonData = eval("(" + data + ")");
-				if (typeof pushMemoryChart == "function") { 
-					pushMemoryChart(jsonData);
+			
+			var WU1 = {};
+			WU1.name = 'WU1';
+			WU1.data = [];
+			var ttt = (new Date()).getTime();
+			
+			var WS1 = {};
+			WS1.name = 'WS1';
+			WS1.data = [];
+			
+			for (var i=-5; i<0; i++) {
+				WU1.data.push({x: 0, y: 0});
+				WS1.data.push({x: 0, y: 0});
+			}
+			
+			var pushMemoryChartInterval = setInterval(function(){
+			//setTimeout(function(){
+				if (typeof memPushChart == "function") { 
+					WU1.data.shift();
+					WU1.data.push({x: (new Date()).getTime(), y: Math.floor(Math.random() * 100) + 0});
+					
+					WS1.data.shift();
+					WS1.data.push({x: (new Date()).getTime(), y: Math.floor(Math.random() * 50) + 0});
+					var data = []
+					data.push(WU1);
+					data.push(WS1);
+					
+					memPushChart(data);
+					
 				}
-			}, 5000);
+			}, 1000);
 			
 			setInterval(function(){
 				var mem_per = Math.floor(Math.random() * 100) + 0;
-				var data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , sessionId: 'FEDE85678952F8190570845E12D5E7D7' , uri: '/bg-middle.png' , ip: '127.0.0.1' , stTime: '1456736268795' }}";
-				data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , uri: '/bg-middle.png' , ip: '127.0.0.1' , edTime: '1456736268796' , status: '304' }}";
-				var jsonData = eval("(" + data + ")");
-				if (typeof pushXViewChart == "function") { 
-					pushXViewChart(jsonData);
+				if (typeof spdmtPushChart == "function") {
+					
+					var startTime = (new Date()).getTime();
+					var data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , sessionId: 'FEDE85678952F8190570845E12D5E7D7' , uri: '/bg-middle.png' , ip: '127.0.0.1' , stTime: '" + startTime + "' }}";
+					spdmtPushChart(data);
+					
+					data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , uri: '/bg-middle.png' , ip: '127.0.0.1' , edTime: '" + (startTime + Math.floor(Math.random() * 10000) + 0) + "' , status: '200' }}";
+					spdmtPushChart(data);
 				}
-			}, 5000);
+			}, 1000);
 		}
 	</script>
 	

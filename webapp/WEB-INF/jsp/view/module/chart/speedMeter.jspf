@@ -1,2 +1,8 @@
 <%@page pageEncoding="UTF-8"%>
-speed meter  chart
+<div id="spdmtDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">empty</div>
+
+<script>
+function spdmtPushChart(data) {
+	
+}
+</script>

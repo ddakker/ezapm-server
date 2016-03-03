@@ -120,8 +120,7 @@
 	    <script src="/resources/sb-admin/js/abn_tree_directive.js"></script>
 	    <script src="/resources/sb-admin/js/abn_tree_data.js"></script>
 		
-		<script src="/resources/js/vertx/sockjs-0.3.4.js"></script>
-		<script src="/resources/js/vertx/vertx-eventbus.js"></script>
+		
 	    
 		
 	</body>
