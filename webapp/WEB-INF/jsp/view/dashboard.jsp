@@ -6,7 +6,6 @@
 	<script src="/resources/js/vertx/sockjs-0.3.4.js"></script>
 	<script src="/resources/js/vertx/vertx-eventbus.js"></script>
 	
-	<input type="text" id="input" />
 	<script>
 		var IS_DUMMY_DATA = true;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
@@ -18,7 +17,7 @@
 			var eb = new EventBus("http://localhost:9090/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
-					//console.log(msg.body)
+					console.log(msg.body)
 					
 					var revData = $.parseJSON(msg.body);//eval("(" + msg.body + ")");
 					
@@ -34,19 +33,19 @@
 			}
 			//send();
 		} else {
-			setInterval(function(){
+			/* setInterval(function(){
 				if (typeof memPushChart == "function") {
 					var startTime = (new Date()).getTime();
 					var per = Math.floor(Math.random() * 100) + 0;
-					var data = "{grp: 'grp_was_mem', data: {serverNm: 'WU1', heapUsedPercent: '" + per + "', heapMax: '63438848', heapUsed: '40509152', nonHeapUsed: '32213336', time: '" + startTime + "'}}";
-					memPushChart(eval("(" + data + ")"));
+					var data = "{\"grp\": \"grp_was_mem\", \"data\": {\"serverNm\": \"WU1\", \"heapUsedPercent\": \"" + per + "\", \"heapMax\": \"31457280\", \"heapUsed\": \"21667352\", \"nonHeapUsed\": \"34733480\", \"time\": \"" + startTime + "\"}}";
+					memPushChart($.parseJSON(data));
 					
 					startTime += 1000;
 					per = Math.floor(Math.random() * 50) + 0;
-					data = "{grp: 'grp_was_mem', data: {serverNm: 'WS1', heapUsedPercent: '" + per + "', heapMax: '63438848', heapUsed: '40509152', nonHeapUsed: '32213336', time: '" + startTime + "'}}";
-					memPushChart(eval("(" + data + ")"));
+					data = "{\"grp\": \"grp_was_mem\", \"data\": {\"serverNm\": \"WS1\", \"heapUsedPercent\": \"" + per + "\", \"heapMax\": \"31457280\", \"heapUsed\": \"21667352\", \"nonHeapUsed\": \"34733480\", \"time\": \"" + startTime + "\"}}";
+					memPushChart($.parseJSON(data));
 				}
-			}, 2000);
+			}, 2000); */
 			
 			/* setInterval(function(){
 				var mem_per = Math.floor(Math.random() * 100) + 0;
@@ -59,6 +58,30 @@
 					spdmtPushChart(data);
 				}
 			}, 1000); */
+			
+			/* setInterval(function(){
+				if (typeof tpsPushChart == "function") {
+					var startTime = (new Date()).getTime();
+					var per = Math.floor(Math.random() * 100) + 0;
+					var data = "{grp: 'grp_was_mem', data: {serverNm: 'WU1', heapUsedPercent: '" + per + "', heapMax: '63438848', heapUsed: '40509152', nonHeapUsed: '32213336', time: '" + startTime + "'}}";
+					tpsPushChart(eval("(" + data + ")"));
+					
+				}
+			}, 2000); */
+			
+			setInterval(function(){
+				if (typeof dsPushChart == "function") {
+					var startTime = (new Date()).getTime();
+					var per = Math.floor(Math.random() * 100) + 0;
+					var data = "{\"grp\": \"grp_was_mem\", \"data\": {\"serverNm\": \"WU1\", \"heapUsedPercent\": \"" + per + "\", \"heapMax\": \"31457280\", \"heapUsed\": \"21667352\", \"nonHeapUsed\": \"34733480\", \"time\": \"" + startTime + "\"}}";
+					dsPushChart($.parseJSON(data));
+					
+					startTime += 1000;
+					per = Math.floor(Math.random() * 50) + 0;
+					data = "{\"grp\": \"grp_was_mem\", \"data\": {\"serverNm\": \"WS1\", \"heapUsedPercent\": \"" + per + "\", \"heapMax\": \"31457280\", \"heapUsed\": \"21667352\", \"nonHeapUsed\": \"34733480\", \"time\": \"" + startTime + "\"}}";
+					dsPushChart($.parseJSON(data));
+				}
+			}, 2000);
 		}
 	</script>
 	
