@@ -24,7 +24,7 @@
 
 	<mvc:annotation-driven />
 
-    <context:component-scan base-package="com.ezwel" use-default-filters="false">
+    <context:component-scan base-package="com.ezwel,org.ezdevgroup.ezapm.server.web" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
     </context:component-scan>
@@ -88,7 +88,7 @@
 	<aop:config proxy-target-class="true">
 
 		<aop:aspect id="aspectLoggging" ref="loggingAspect">
-			<aop:pointcut id="controllerPointcut" expression="execution(* com.ezwel..*Act.*(..))" />
+			<aop:pointcut id="controllerPointcut" expression="execution(* org.ezdevgroup.ezapm.server.web..*Controller.*(..))" />
 			<aop:around method="controllerAround" pointcut-ref="controllerPointcut"  />
 		</aop:aspect>
 

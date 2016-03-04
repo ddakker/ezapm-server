@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 //@EnableJpaRepositories(basePackages = {"io.vertx.examples.spring.repository"})
-@PropertySource(value = { "classpath:properites/global-properties.xml" })
+//@PropertySource(value = { "classpath:properites/globals-properties.xml" })
 //@ComponentScan("io.vertx.examples.spring.service")
 public class AppContext {
 	/*

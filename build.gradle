@@ -9,7 +9,7 @@ ext {
 	gradleVersion	= '2.5'
 	springVersion 	= '4.1.4.RELEASE'
 	//ezwelVersion	= '2.0.1071-SNAPSHOT'
-	ezwelVersion	= '+'
+	ezwelVersion	= '2.0.1887-SNAPSHOT'
 	targetServer = project.hasProperty('target') ? project.getProperty('target') : 'local'
 }
 
