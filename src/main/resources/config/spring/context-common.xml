@@ -30,8 +30,8 @@
 		</constructor-arg>
 	</bean>
 
-    <!-- component-scan 설정-->
-	<context:component-scan base-package="com.ezwel" use-default-filters="false">
+    <!-- component-scan 설정-->    
+	<context:component-scan base-package="com.ezwel,org.ezdevgroup.ezapm.server.web" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
 		<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/> -->
