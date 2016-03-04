@@ -47,9 +47,11 @@ public class DelayExecVerticle extends AbstractVerticle {
 			Map msgMap = JsonUtils.toJson(messageData, HashMap.class);
 			Map dataMap = (Map) msgMap.get("data");
 
-			if (dataMap.get("endTime") != null) {	// 요청 완료 시에만 처리
-				String serverNm = (String) dataMap.get("serverNm");
-				tpsMap.put(serverNm, tpsMap.get(serverNm) == null ? 1 : tpsMap.get(serverNm) + 1);
+			synchronized (DelayExecVerticle.tpsMap) {
+				if (dataMap.get("edTime") != null) {    // 요청 완료 시에만 처리
+					String serverNm = (String) dataMap.get("serverNm");
+					tpsMap.put(serverNm, tpsMap.get(serverNm) == null ? 1 : tpsMap.get(serverNm) + 1);
+				}
 			}
 		});
 	}
