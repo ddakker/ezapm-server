@@ -19,8 +19,13 @@
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
 					//console.log(msg.body)
-					if (typeof memPushChart == "function") { 
-						memPushChart(msg.body);
+					
+					var revData = $.parseJSON(msg.body);//eval("(" + msg.body + ")");
+					
+					if (revData.grp == "grp_was_mem") {
+						if (typeof memPushChart == "function") memPushChart(revData);
+					} else if (revData.grp == "grp_tps") {
+						if (typeof tpsPushChart == "function") tpsPushChart(revData);
 					}
 				});
 			};
@@ -29,49 +34,31 @@
 			}
 			//send();
 		} else {
-			
-			var WU1 = {};
-			WU1.name = 'WU1';
-			WU1.data = [];
-			var ttt = (new Date()).getTime();
-			
-			var WS1 = {};
-			WS1.name = 'WS1';
-			WS1.data = [];
-			
-			for (var i=-5; i<0; i++) {
-				WU1.data.push({x: 0, y: 0});
-				WS1.data.push({x: 0, y: 0});
-			}
-			
-			var pushMemoryChartInterval = setInterval(function(){
-			//setTimeout(function(){
-				if (typeof memPushChart == "function") { 
-					WU1.data.shift();
-					WU1.data.push({x: (new Date()).getTime(), y: Math.floor(Math.random() * 100) + 0});
-					
-					WS1.data.shift();
-					WS1.data.push({x: (new Date()).getTime(), y: Math.floor(Math.random() * 50) + 0});
-					var data = []
-					data.push(WU1);
-					data.push(WS1);
-					
-					//memPushChart(data);
-					
-				}
-			}, 1000);
-			
 			setInterval(function(){
+				if (typeof memPushChart == "function") {
+					var startTime = (new Date()).getTime();
+					var per = Math.floor(Math.random() * 100) + 0;
+					var data = "{grp: 'grp_was_mem', data: {serverNm: 'WU1', heapUsedPercent: '" + per + "', heapMax: '63438848', heapUsed: '40509152', nonHeapUsed: '32213336', time: '" + startTime + "'}}";
+					memPushChart(eval("(" + data + ")"));
+					
+					startTime += 1000;
+					per = Math.floor(Math.random() * 50) + 0;
+					data = "{grp: 'grp_was_mem', data: {serverNm: 'WS1', heapUsedPercent: '" + per + "', heapMax: '63438848', heapUsed: '40509152', nonHeapUsed: '32213336', time: '" + startTime + "'}}";
+					memPushChart(eval("(" + data + ")"));
+				}
+			}, 2000);
+			
+			/* setInterval(function(){
 				var mem_per = Math.floor(Math.random() * 100) + 0;
 				if (typeof spdmtPushChart == "function") {
 					var startTime = (new Date()).getTime();
-					var data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , sessionId: 'FEDE85678952F8190570845E12D5E7D7' , uri: '/bg-middle.png' , ip: '127.0.0.1' , stTime: '" + startTime + "' }}";
+					var data = "{grp: 'grp_was_req', data: {UUID: 'a', server: 'null' , threadId: '38' , sessionId: 'FEDE85678952F8190570845E12D5E7D7' , uri: '/bg-middle.png' , ip: '127.0.0.1' , stTime: '" + startTime + "' }}";
 					spdmtPushChart(data);
 					
-					data = "{grp: 'grp_was_req', data: {server: 'null' , threadId: '38' , uri: '/bg-middle.png' , ip: '127.0.0.1' , edTime: '" + (startTime + Math.floor(Math.random() * 10000) + 0) + "' , status: '200' }}";
+					data = "{grp: 'grp_was_req', data: {UUID: 'a', server: 'null' , threadId: '38' , uri: '/bg-middle.png' , ip: '127.0.0.1' , edTime: '" + (startTime + Math.floor(Math.random() * 10000) + 0) + "' , status: '200' }}";
 					spdmtPushChart(data);
 				}
-			}, 1000);
+			}, 1000); */
 		}
 	</script>
 	
@@ -123,7 +110,7 @@
 	        <div class="panel panel-primary">
 	        	<div class="panel-heading"><spring:message code="tit.panel.tph"/></div>
                 <div class="panel-body">
-                    <div style="height: 120px"><%@ include file="/WEB-INF/jsp/view/module/chart/tph.jspf" %></div>
+                    <div style="height: 150px"><%@ include file="/WEB-INF/jsp/view/module/chart/tph.jspf" %></div>
                 </div>
             </div>
 	    </div>
@@ -132,7 +119,7 @@
 	        <div class="panel panel-primary">
 	        	<div class="panel-heading"><spring:message code="tit.panel.mem"/></div>
                 <div class="panel-body">
-                    <div style="height: 120px"><%@ include file="/WEB-INF/jsp/view/module/chart/mem.jspf" %></div>
+                    <div style="height: 150px"><%@ include file="/WEB-INF/jsp/view/module/chart/mem.jspf" %></div>
                 </div>
             </div>
 	    </div>
@@ -140,7 +127,7 @@
 	        <div class="panel panel-primary">
 	        	<div class="panel-heading"><spring:message code="tit.panel.ds"/></div>
                 <div class="panel-body">
-                    <div style="height: 120px"><%@ include file="/WEB-INF/jsp/view/module/chart/ds.jspf" %></div>
+                    <div style="height: 150px"><%@ include file="/WEB-INF/jsp/view/module/chart/ds.jspf" %></div>
                 </div>
             </div>
 	    </div>
@@ -148,7 +135,7 @@
 	        <div class="panel panel-primary">
 	        	<div class="panel-heading"><spring:message code="tit.panel.noti"/></div>
                 <div class="panel-body">
-                    <div style="height: 120px"><%@ include file="/WEB-INF/jsp/view/module/chart/noti.jspf" %></div>
+                    <div style="height: 150px"><%@ include file="/WEB-INF/jsp/view/module/chart/noti.jspf" %></div>
                 </div>
             </div>
 	    </div>
