@@ -10,3 +10,4 @@ gradle*
 .idea*
 .idea/
 *.iml
+rebel.xml
