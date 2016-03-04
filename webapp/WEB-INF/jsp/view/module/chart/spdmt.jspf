@@ -1,8 +1,108 @@
 <%@page pageEncoding="UTF-8"%>
-<div id="spdmtDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">empty</div>
+<div id="spdmtDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+
+<div id="mainLayout">
+	
+	<!--<div id="dropDiv" style="position:absolute; display:none; top:-20px; background:red;">11</div>-->
+	<div class="panel panel-success" id="speedMeter_WU1" style="width:10%; height:160px; float:left; margin-left:10px; margin-top:15px; min-width:30px;">
+		<table style="height:100%; width:100%;">
+			<tr>
+				<td valign="bottom" id="speedStack_WU1"></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="panel panel-success" id="speedMeter_WS1" style="width:10%; height:160px; float:left; margin-left:10px; margin-top:15px; min-width:30px;">
+		<table style="height:100%; width:100%;">
+			<tr>
+				<td valign="bottom" id="speedStack_WS1"></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+</div>
 
 <script>
-function spdmtPushChart(data) {
-	console.log(data);
-}
+
+
+	function chagneColor() {
+		$('.speedStackData').each(function (index, value) { 
+			var stTime = $(this).attr("start");
+			var curTime = (new Date()).getTime();
+			if (curTime - stTime > 2000) {
+				$(this).css("background-color", "red");
+			}
+		});
+	}
+
+
+
+
+
+
+
+
+
+	
+	
+	function spdmtPushChart(data) {
+		var json = eval("(" + data + ")");
+		var serverNm = json.data.serverNm;
+		var threadId = json.data.threadId;
+		var sessionId = json.data.sessionId;
+		var stTime = json.data.stTime;
+		var uniqueKey = SHA1(json.data.serverNm + json.data.threadId + json.data.sessionId + json.data.uri);
+		
+		if (typeof json.data.stTime == "undefined") {
+			$("#speedStackData_" + uniqueKey).remove();
+		} else {
+			var request = '<i id="dropBall_' + uniqueKey + '" class="fa fa-circle fa-1" style="position:absolute; display:none; top:-20px;  width:5px; height:5px;"></i>';
+			$("#mainLayout").append(request);
+			
+			// 리퀘스트 최초들어옴
+			drawGraph(uniqueKey, serverNm, stTime);
+		}
+		
+	}
+	
+	
+	function drawGraph(uniqueKey, serverNm, stTime) {
+		var $dropBall = $('#dropBall_' + uniqueKey);
+			
+	    // get position of the element we clicked on
+	    var offset = $("#speedMeter_" + serverNm).offset();
+	    
+	    // get width/height of click element
+	    var w = $("#speedMeter_" + serverNm).outerWidth();
+	    var h = $("#speedMeter_" + serverNm).outerHeight();
+	    
+	    // get width/height of drop element
+	    var dh = $dropBall.outerHeight();
+	    var dw = $dropBall.outerWidth();
+	    
+	    // determine middle position
+	    var initLeft = offset.left + ((w/2) - (dw+2));
+	    
+	    
+	    // animate drop
+	    $dropBall.css({
+	        left: initLeft,
+	        top: dh,
+	        opacity: 0,
+	        display: 'block'
+		}).animate({
+	        left: initLeft,
+	        top: h + 30,
+	        opacity: 1
+		}, 300, function() {
+
+	   		$("#speedStack_" + serverNm).prepend("<div id='speedStackData_" + uniqueKey + "' class='speedStackData' start='" + stTime + "' style='background: green; width:100%; height:10px; border: 1px solid black'>&nbsp;</div>");
+	   		$dropBall.remove();
+	   		
+	   		chagneColor();
+	   		
+		});
+	}
 </script>
