@@ -1,2 +1,29 @@
 <%@page pageEncoding="UTF-8"%>
-TPS  chart
+<div id="tpsDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">empty</div>
+
+<script>
+
+function tpsIntiChart() {
+	var chartList = "";
+	for (var i=0,size=SERVER_LIST.length; i<size; i++) {
+		chartList += "<span id=\"tpsChart_" + SERVER_LIST[i].serverNm + "\">.</span> | ";
+	}
+	$("#tpsDivChart").html(chartList);
+}
+tpsIntiChart();
+
+function tpsPushChart(revData) {
+	var serverMap = revData.data;
+	var period = revData.period/1000;	// ms to minute
+	console.log("period: " + period)
+	for (key in serverMap){
+		var tps = Math.ceil(serverMap[key]/period);
+		$("#tpsChart_" + key).html(tps);
+	}
+	$(serverMap).each(function(idx, val){
+		console.log("idx: " + idx + ", val: " + val)
+	});
+
+}
+
+</script>

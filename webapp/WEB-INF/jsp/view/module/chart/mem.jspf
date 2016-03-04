@@ -9,42 +9,39 @@
 } */
 var abcd =0;
 var memChartData = [];
-function memPushChart(data) {
+function memPushChart(revObj) {
 	//console.log(data)
 	//initChartMem(data);
 	if ($('#memDivChart').highcharts() == undefined) {
 		//memInitChart(data[0].data.length);
-		memInitChart(60);
-		
+		memInitChart(10);
+
 		setInterval(function(){
 			$('#memDivChart').highcharts().redraw();
-		}, 5000);
+		}, 1000);
 	} else {
 		/*for (var i=0,size=data.length; i<size; i++) {
 			$('#memDivChart').highcharts().series[i].setData(data[i].data, false);
 		}
 		$('#memDivChart').highcharts().redraw(); */
-		
-		console.log(data);
-		var revObj = eval("(" + data + ")"); //$.parseJSON(data);
-		
-		console.log("memChartData.length: " + memChartData.length)
+		//console.log(revObj)
+
 		for (var i=0,size=memChartData.length; i<size; i++) {
 			var sData = memChartData[i];
-			
+
 			//console.log("sData.name: " + sData.name + ", revObj.serverNm: " + revObj.data.serverNm)
 			if (sData.name == revObj.data.serverNm) {
 				sData.data.shift();
 				sData.data.push({x: parseInt(revObj.data.time), y: revObj.data.heapUsedPercent});
-				
+
 				//$('#memDivChart').highcharts().series[i].setData(sData.data, false);
 				$('#memDivChart').highcharts().series[i].addPoint([parseInt(revObj.data.time), parseInt(revObj.data.heapUsedPercent)], false, true);
 				//console.log(sData.data[sData.data.length-2].x)
 				//$('#memDivChart').highcharts().series[i].addPoint({x: sData.data[sData.data.length-2].x + 1, y: parseInt(revObj.data.heapUsedPercent), time: parseInt(revObj.data.time)}, false, true);
 			}
 		}
-		
-			
+
+
 	}
 }
 function memInitChart(dataSize) {
@@ -53,15 +50,15 @@ function memInitChart(dataSize) {
 		var server = {}
 		server.name = SERVER_LIST[i].serverNm;
 		server.data = [];
-		
+
 		for (var j=dataSize*-1; j<0; j++) {
 			server.data.push({x: startTime+(j*1000), y: 0, time: startTime});
 			//server.data.push({x: j, y: 0, time: startTime});
 		}
 		memChartData.push(server);
 	}
-	
-	
+
+
        //data = data1;
 	Highcharts.setOptions({
            global: {
@@ -96,7 +93,7 @@ function memInitChart(dataSize) {
         xAxis: {
             type: 'datetime',
             //type: 'linear',
-            tickPixelInterval: 150/* ,
+            tickPixelInterval: 100/* ,
             labels: {
             	formatter: function() {
             		return this.value;
