@@ -25,13 +25,13 @@
 					var revData = $.parseJSON(msg.body);//eval("(" + msg.body + ")");
 
 					if (revData.grp == "grp_was_mem") {
-						if (typeof memPushChart == "function") 		memPushChart(revData);
+						//if (typeof memPushChart == "function") 		memPushChart(revData);
 					} else if (revData.grp == "grp_resInfo") {
-						if (typeof tpsPushChart == "function") 		tpsPushChart(revData);
-						if (typeof resTimePushChart == "function") 		resTimePushChart(revData);
+						//if (typeof tpsPushChart == "function") 		tpsPushChart(revData);
+						//if (typeof resTimePushChart == "function") 		resTimePushChart(revData);
 					} else if (revData.grp == "grp_was_req") {
 						if (typeof spdmtPushChart == "function")	spdmtPushChart(revData);
-						if (typeof xViewPushChart == "function")	xViewPushChart(revData);
+						//if (typeof xViewPushChart == "function")	xViewPushChart(revData);
 					}
 					
 					
