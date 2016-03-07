@@ -15,7 +15,9 @@
 			var BUS_SOCKJS_CLIENT = "bus.sockjs.client";
 			var BUS_SOCKJS_SERVER = "bus.sockjs.server";
 
-			var eb = new EventBus("http://localhost:9090/eventbus/");
+			var eb;
+			if (IS_DUMMY_DATA)	eb = new EventBus("http://localhost:9091/eventbus/");
+			else				eb = new EventBus("http://192.168.110.119:9091/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
 					//console.log(msg.body)					
