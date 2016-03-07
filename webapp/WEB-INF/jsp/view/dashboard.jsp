@@ -8,7 +8,7 @@
 	<script src="/resources/js/lib/sha1.js"></script>
 	
 	<script>
-		var IS_DUMMY_DATA = false;
+		var IS_DUMMY_DATA = true;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 
 		if (IS_DUMMY_DATA == false) {
@@ -102,15 +102,16 @@
 						afterArray.push(value);
 
 						data = '{"grp": "grp_was_req", "data": {"serverNm": "' + value.serverNm + '" , "threadId": "' + value.threadId + '", "sessionId": "' + value.sessionId + '" , "uri": "/bg-middle.png" , "ip": "127.0.0.1" , "stTime": "' + startTime + '" }}';
-						spdmtPushChart(data);
+						spdmtPushChart($.parseJSON(data));
 
 					} else {
 
 						rnd = Math.floor(Math.random() * afterArray.length);
-						data = "{grp: 'grp_was_req', data: {serverNm: '" + afterArray[rnd].serverNm + "' , threadId: '" + afterArray[rnd].threadId + "' , sessionId: '" + afterArray[rnd].sessionId + "' ,  uri: '/bg-middle.png' , ip: '127.0.0.1' , edTime: '" + startTime + "' , status: '200' }}";
+						
+						data = '{"grp": "grp_was_req", "data": {"serverNm": "' + afterArray[rnd].serverNm + '" , "threadId": "' + afterArray[rnd].threadId + '" , "sessionId": "' + afterArray[rnd].sessionId + '" ,  "uri": "/bg-middle.png" , "ip": "127.0.0.1" , "edTime": "' + startTime + '" , "status": "200" }}';
 						afterArray.splice(rnd, 1);
 
-						spdmtPushChart(data);
+						spdmtPushChart($.parseJSON(data));
 					}
 				}
 			}, 50);
