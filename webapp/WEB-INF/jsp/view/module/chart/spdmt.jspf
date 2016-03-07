@@ -48,7 +48,6 @@
 	
 	
 	function spdmtPushChart(data) {
-		var json = eval("(" + data + ")");
 		var serverNm = json.data.serverNm;
 		var threadId = json.data.threadId;
 		var sessionId = json.data.sessionId;
