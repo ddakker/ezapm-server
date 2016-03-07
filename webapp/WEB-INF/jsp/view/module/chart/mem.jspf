@@ -25,7 +25,6 @@ function memPushChart(revObj) {
 		}
 		$('#memDivChart').highcharts().redraw(); */
 		//console.log(revObj)
-
 		for (var i=0,size=memChartData.length; i<size; i++) {
 			var sData = memChartData[i];
 

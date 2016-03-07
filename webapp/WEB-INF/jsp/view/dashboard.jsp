@@ -95,6 +95,7 @@
 
 						data = '{"grp": "grp_was_req", "data": {"serverNm": "' + value.serverNm + '" , "threadId": "' + value.threadId + '", "sessionId": "' + value.sessionId + '" , "uri": "/bg-middle.png" , "ip": "127.0.0.1" , "stTime": "' + startTime + '" }}';
 						spdmtPushChart(data);
+
 					} else {
 
 						rnd = Math.floor(Math.random() * afterArray.length);
