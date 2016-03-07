@@ -8,7 +8,7 @@
 	<script src="/resources/js/lib/sha1.js"></script>
 	
 	<script>
-		var IS_DUMMY_DATA = true;
+		var IS_DUMMY_DATA = false;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 
 		if (IS_DUMMY_DATA == false) {
