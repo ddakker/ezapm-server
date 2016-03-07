@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+	<Resource name="jdbc/mariadb_tams"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="org.mariadb.jdbc.Driver"
+			  url="jdbc:mariadb://mariadb-dev:3306/ez_tams"
+			  username="tams"
+			  password="eztams_0606" />
+</Context>
