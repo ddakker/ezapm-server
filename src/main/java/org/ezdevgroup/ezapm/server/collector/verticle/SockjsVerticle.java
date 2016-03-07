@@ -37,7 +37,7 @@ public class SockjsVerticle extends AbstractVerticle {
 			router.route().handler(StaticHandler.create());
 
 			// Start the web server and tell it to use the router to handle requests.
-			vertx.createHttpServer().requestHandler(router::accept).listen(9090);
+			vertx.createHttpServer().requestHandler(router::accept).listen(9091);
 
 			EventBus eb = vertx.eventBus();
 
