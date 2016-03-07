@@ -8,7 +8,7 @@
 	<script src="/resources/js/lib/sha1.js"></script>
 	
 	<script>
-		var IS_DUMMY_DATA = true;
+		var IS_DUMMY_DATA = false;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 
 		if (IS_DUMMY_DATA == false) {
@@ -18,14 +18,15 @@
 			var eb = new EventBus("http://localhost:9090/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
-					console.log(msg.body)
+					//console.log(msg.body)					
 
 					var revData = $.parseJSON(msg.body);//eval("(" + msg.body + ")");
 
 					if (revData.grp == "grp_was_mem") {
 						if (typeof memPushChart == "function") memPushChart(revData);
-					} else if (revData.grp == "grp_tps") {
+					} else if (revData.grp == "grp_resInfo") {
 						if (typeof tpsPushChart == "function") tpsPushChart(revData);
+						if (typeof tpsPushChart == "function") resTimePushChart(revData);
 					}
 				});
 			};

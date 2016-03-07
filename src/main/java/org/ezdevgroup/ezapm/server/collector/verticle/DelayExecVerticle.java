@@ -1,5 +1,6 @@
-package org.ezdevgroup.ezapm.server.collector.verticle;
+/*package org.ezdevgroup.ezapm.server.collector.verticle;
 
+import com.ezwel.core.framework.cache.Cache;
 import com.ezwel.core.support.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +9,12 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.Message;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 public class DelayExecVerticle extends AbstractVerticle {
 	private static Logger log = LoggerFactory.getLogger(DelayExecVerticle.class);
@@ -19,7 +23,7 @@ public class DelayExecVerticle extends AbstractVerticle {
 	public static final String ALL_PRODUCTS_ADDRESS = "example.all.products";
 	public static final String BUS_DELAY_TPS = "bus.delay.tps";
 
-	public static Map<String, Integer> tpsMap = Collections.synchronizedMap(new HashMap<>());
+	@Resource Cache<Map<String, Long>> reqTimeCache;
 
 	@Override
 	public void start() throws Exception {
@@ -42,18 +46,6 @@ public class DelayExecVerticle extends AbstractVerticle {
 
 		});
 
-		vertx.eventBus().consumer(BUS_DELAY_TPS, (Message<String> message) -> {
-			String messageData = message.body();
-			Map msgMap = JsonUtils.toJson(messageData, HashMap.class);
-			Map dataMap = (Map) msgMap.get("data");
-
-			synchronized (DelayExecVerticle.tpsMap) {
-				if (dataMap.get("edTime") != null) {    // 요청 완료 시에만 처리
-					String serverNm = (String) dataMap.get("serverNm");
-					tpsMap.put(serverNm, tpsMap.get(serverNm) == null ? 1 : tpsMap.get(serverNm) + 1);
-				}
-			}
-		});
 	}
 
 
@@ -82,3 +74,4 @@ public class DelayExecVerticle extends AbstractVerticle {
 		});
 	}
 }
+*/

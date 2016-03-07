@@ -21,35 +21,39 @@ public class SockjsVerticle extends AbstractVerticle {
 	@Override
 	public void start() throws Exception {
 
-		Router router = Router.router(vertx);
+		try {
+			Router router = Router.router(vertx);
 
-		// Allow events for the designated addresses in/out of the event bus bridge
-		BridgeOptions opts = new BridgeOptions()
-				.addInboundPermitted(new PermittedOptions().setAddress(SockjsVerticle.BUS_SOCKJS_SERVER))
-				.addOutboundPermitted(new PermittedOptions().setAddress(SockjsVerticle.BUS_SOCKJS_CLIENT));
+			// Allow events for the designated addresses in/out of the event bus bridge
+			BridgeOptions opts = new BridgeOptions()
+					.addInboundPermitted(new PermittedOptions().setAddress(SockjsVerticle.BUS_SOCKJS_SERVER))
+					.addOutboundPermitted(new PermittedOptions().setAddress(SockjsVerticle.BUS_SOCKJS_CLIENT));
 
-		// Create the event bus bridge and add it to the router.
-		SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
-		router.route("/eventbus/*").handler(ebHandler);
+			// Create the event bus bridge and add it to the router.
+			SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);
+			router.route("/eventbus/*").handler(ebHandler);
 
-		// Create a router endpoint for the static content.
-		router.route().handler(StaticHandler.create());
+			// Create a router endpoint for the static content.
+			router.route().handler(StaticHandler.create());
 
-		// Start the web server and tell it to use the router to handle requests.
-		vertx.createHttpServer().requestHandler(router::accept).listen(9090);
+			// Start the web server and tell it to use the router to handle requests.
+			vertx.createHttpServer().requestHandler(router::accept).listen(9090);
 
-		EventBus eb = vertx.eventBus();
+			EventBus eb = vertx.eventBus();
 
-		// Register to listen for messages coming IN to the server
-		//eb.consumer("chat.to.server").handler(message -> {
-		eb.consumer(SockjsVerticle.BUS_SOCKJS_SERVER, (Message<String> message) -> {
-			//log.debug("---- message: " + message);
-			log.info("---- Sockjs message.body(): " + message.body());
-			// Create a timestamp string
-			//String timestamp = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(Date.from(Instant.now()));
-			// Send the message back out to all clients with the timestamp prepended.
-			eb.publish(SockjsVerticle.BUS_SOCKJS_CLIENT, message.body());
-		});
+			// Register to listen for messages coming IN to the server
+			//eb.consumer("chat.to.server").handler(message -> {
+			eb.consumer(SockjsVerticle.BUS_SOCKJS_SERVER, (Message<String> message) -> {
+				//log.debug("---- message: " + message);
+				log.info("---- Sockjs message.body(): " + message.body());
+				// Create a timestamp string
+				//String timestamp = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(Date.from(Instant.now()));
+				// Send the message back out to all clients with the timestamp prepended.
+				eb.publish(SockjsVerticle.BUS_SOCKJS_CLIENT, message.body());
+			});
+		} catch (Exception e) {
+			System.err.println("sockjs e: " + e);
+		}
 
 	}
 }

@@ -15,15 +15,20 @@ tpsIntiChart();
 function tpsPushChart(revData) {
 	var serverMap = revData.data;
 	var period = revData.period/1000;	// ms to minute
-	console.log("period: " + period)
 	for (key in serverMap){
-		var tps = Math.ceil(serverMap[key]/period);
-		$("#tpsChart_" + key).html(tps);
+		
+		if (serverMap[key]) {
+			console.log(key + ", " + serverMap[key] + ", " + serverMap[key].length);
+			var resTimeSum = 0;
+			for (i in serverMap[key]) {
+				resTimeSum += serverMap[key][i];
+			}
+			
+			$("#tpsChart_" + key).html(Math.ceil(serverMap[key].length/period));
+		} else {
+			$("#tpsChart_" + key).html(0);
+		}
 	}
-	$(serverMap).each(function(idx, val){
-		console.log("idx: " + idx + ", val: " + val)
-	});
-
 }
 
 </script>

@@ -17,43 +17,47 @@ public class ServerVerticle extends AbstractVerticle {
 
 	@Override
 	public void start() throws Exception {
-		vertx.createNetServer().connectHandler(socket -> {
-			clientSocketList.add(socket);
+		try {
+			vertx.createNetServer().connectHandler(socket -> {
+				clientSocketList.add(socket);
 
-			String handlerID = socket.writeHandlerID();
+				String handlerID = socket.writeHandlerID();
 
-			socket.handler(RecordParser.newDelimited("\n", buffer -> {
+				socket.handler(RecordParser.newDelimited("\n", buffer -> {
 
-				String message = buffer.toString().trim();
+					String message = buffer.toString().trim();
 
-				log.debug(socket.remoteAddress() + " (" + handlerID + ") => " + message);
+					log.debug(socket.remoteAddress() + " (" + handlerID + ") => " + message);
 
 
-				/*vertx.eventBus().<String> send(DelayExecVerticle.ALL_PRODUCTS_ADDRESS, message, result -> {
-					if (result.succeeded()) {
-						log.debug("SS result.result().body(): " + result.result().body());
-						socket.write("Receive => " + message + "\r\n");
-					} else {
-						log.error("FF result.cause().toString(): " + result.cause().toString());
+					/*vertx.eventBus().<String> send(DelayExecVerticle.ALL_PRODUCTS_ADDRESS, message, result -> {
+						if (result.succeeded()) {
+							log.debug("SS result.result().body(): " + result.result().body());
+							socket.write("Receive => " + message + "\r\n");
+						} else {
+							log.error("FF result.cause().toString(): " + result.cause().toString());
+						}
+					});*/
+					//socket.close();
+					
+					//vertx.eventBus().<String> send(DelayExecVerticle.ALL_PRODUCTS_ADDRESS, message);
+					
+					//vertx.eventBus().<String> send("chat.to.server", ": 테스트여 00");
+					if (message.contains("grp_was_req")) {
+						vertx.eventBus().send(DataProcessVerticle.BUS_DATA_PROCESS_TPS, message);
 					}
-				});*/
-				//socket.close();
-				
-				//vertx.eventBus().<String> send(DelayExecVerticle.ALL_PRODUCTS_ADDRESS, message);
-				
-				//vertx.eventBus().<String> send("chat.to.server", ": 테스트여 00");
-				if (message.contains("grp_was_req")) {
-					vertx.eventBus().send(DelayExecVerticle.BUS_DELAY_TPS, message);
-				}
-				vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, message);
+					vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, message);
 
-			}));
-			socket.closeHandler(v -> {
-				System.out.println("The socket has been closed");
-				clientSocketList.remove(socket);
-				socket.close();
-			});
+				}));
+				socket.closeHandler(v -> {
+					System.out.println("The socket has been closed");
+					clientSocketList.remove(socket);
+					socket.close();
+				});
 
-		}).listen(9999);
+			}).listen(9999);
+		} catch (Exception e) {
+			System.err.println("sock e: " + e);
+		}
 	}
 }
