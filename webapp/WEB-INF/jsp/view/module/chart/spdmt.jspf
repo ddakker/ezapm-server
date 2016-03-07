@@ -62,7 +62,7 @@
 			$("#mainLayout").append(request);
 			
 			// 리퀘스트 최초들어옴
-			drawGraph(uniqueKey, serverNm, stTime);
+			drawGraph(uniqueKey, serverNm, stTime); 
 		}
 		
 	}
