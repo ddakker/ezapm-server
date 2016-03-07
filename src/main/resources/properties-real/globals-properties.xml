@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>globals-properties real</comment>
+	<entry key="server.type">real</entry>								<!-- 서버정보[local,dev,stage,real] -->
+
+	<entry key="content.key.result.code">result</entry>					<!-- 결과 코드 Key -->
+	<entry key="content.key.result.message">message</entry>				<!-- 결과 메시지 Key -->
+	<entry key="content.value.success">0000</entry>						<!-- 처리 성공 -->
+	<entry key="content.value.exception">9001</entry>					<!-- 처리 실패 -->
+	<entry key="content.value.badcreden">8001</entry>					<!-- 권한 획득 실패 -->
+	<entry key="content.value.notauth">8002</entry>						<!-- 권한 없음 -->
+
+	<entry key="view.jsp.error">error/error</entry>						<!-- 에러 페이지 -->
+	<entry key="view.jsp.failauth">error/failAuth</entry>				<!-- 권한 획득 실패(로그인 실패) -->
+	<entry key="view.jsp.notauth">error/notAuth</entry>					<!-- 권한 없음 -->
+	
+	<entry key="mail.server"></entry>
+	<entry key="mail.admin"></entry>
+
+</properties>

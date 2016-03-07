@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    					http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+ 
+	<!-- cacheManager 명칭 중요!! 다르게 하고 싶으면 <cache:annotation-driven cache-manager 속성에 지정 -->
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager">
+            <bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+                <property name="configLocation" value="classpath:config/cache/ehcache.xml"></property>
+            </bean>
+        </property>
+    </bean>
+ 
+ 
+	<bean id="reqTimeCache" class="com.ezwel.core.ehcache.EhCache">
+	    <constructor-arg name="cacheManager" ref="ehCacheManager" />
+	    <constructor-arg name="cacheName" value="REQ_TIME" />
+	</bean>
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>application-properties</comment>
+
+
+	<!-- <entry key="msg.test1">default  korean hangul......</entry>
+	<entry key="msg.test2">default parameter1 = {0}, parameter2 = {1}...</entry> -->
+	
+	<entry key="tit.site.nm">EZAPM</entry>
+	
+	<entry key="tit.panel.tps">실시간 서비스 처리율/s</entry>
+		<entry key="tit.panel.rps">RPS</entry>
+	<entry key="tit.panel.resTime">실시간 평균 응답시간/s</entry>
+	<entry key="tit.panel.mem">Memory</entry>
+	<entry key="tit.panel.ds">Datasource</entry>
+	<entry key="tit.panel.mq">MessageQueue</entry>
+	<entry key="tit.panel.speedMeter">Speed Meter</entry>
+	<entry key="tit.panel.xView">X-View</entry>
+	<entry key="tit.panel.tph">시간당 서비스 처리량</entry>
+	<entry key="tit.panel.noti">알림</entry>
+</properties>

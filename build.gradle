@@ -47,7 +47,7 @@ dependencies {
 	compile "com.ezwel:ezwel-core-support:$ezwelVersion"
 	compile "com.ezwel:ezwel-core-tag:$ezwelVersion"
 	//compile "com.ezwel:ezwel-core-security:$ezwelVersion"
-	//compile "com.ezwel:ezwel-core-ehcache:$ezwelVersion"
+	compile "com.ezwel:ezwel-core-ehcache:$ezwelVersion"
 	//compile "com.ezwel:ezwel-core-redis:$ezwelVersion"
 	//compile "com.ezwel:ezwel-core-ispn:$ezwelVersion"
 	//compile "com.ezwel:ezwel-core-rabbitmq:$ezwelVersion"

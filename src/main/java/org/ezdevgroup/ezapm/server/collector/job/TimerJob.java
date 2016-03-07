@@ -1,14 +1,18 @@
 package org.ezdevgroup.ezapm.server.collector.job;
 
-import com.ezwel.core.support.util.JsonUtils;
-import io.vertx.core.Vertx;
-import org.ezdevgroup.ezapm.server.collector.verticle.DelayExecVerticle;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TimerTask;
+
+import org.ezdevgroup.ezapm.server.collector.ShareData;
+import org.ezdevgroup.ezapm.server.collector.verticle.DataProcessVerticle;
 import org.ezdevgroup.ezapm.server.collector.verticle.SockjsVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import java.util.TimerTask;
+import com.ezwel.core.support.util.JsonUtils;
+
+import io.vertx.core.Vertx;
 
 /**
  * Created by ddakker on 2016-03-04.
@@ -27,16 +31,16 @@ public class TimerJob extends TimerTask {
 
     @Override
     public void run() {
-        synchronized (DelayExecVerticle.tpsMap) {
-            String tpsJsonStr = JsonUtils.toString(DelayExecVerticle.tpsMap);
+        synchronized (ShareData.resMap) {
+        	String jsonStr = JsonUtils.toString(ShareData.resMap);
             //DelayExecVerticle.tpsMap.clear();
-            for (String key : DelayExecVerticle.tpsMap.keySet()) {
-                DelayExecVerticle.tpsMap.put(key, 0);
+            for (String key : ShareData.resMap.keySet()) {
+            	ShareData.resMap.put(key, null);
             }
 
-            tpsJsonStr =  "{\"grp\": \"grp_tps\", \"period\": " + period + ", \"data\": " + tpsJsonStr + "}";
-            vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, tpsJsonStr);
-        }
+            jsonStr =  "{\"grp\": \"grp_resInfo\", \"period\": " + period + ", \"data\": " + jsonStr + "}";
+            vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, jsonStr);
+		}
 
     }
 }
