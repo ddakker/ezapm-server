@@ -102,15 +102,16 @@
 						afterArray.push(value);
 
 						data = '{"grp": "grp_was_req", "data": {"serverNm": "' + value.serverNm + '" , "threadId": "' + value.threadId + '", "sessionId": "' + value.sessionId + '" , "uri": "/bg-middle.png" , "ip": "127.0.0.1" , "stTime": "' + startTime + '" }}';
-						spdmtPushChart(data);
+						spdmtPushChart($.parseJSON(data));
 
 					} else {
 
 						rnd = Math.floor(Math.random() * afterArray.length);
-						data = "{grp: 'grp_was_req', data: {serverNm: '" + afterArray[rnd].serverNm + "' , threadId: '" + afterArray[rnd].threadId + "' , sessionId: '" + afterArray[rnd].sessionId + "' ,  uri: '/bg-middle.png' , ip: '127.0.0.1' , edTime: '" + startTime + "' , status: '200' }}";
+						
+						data = '{"grp": "grp_was_req", "data": {"serverNm": "' + afterArray[rnd].serverNm + '" , "threadId": "' + afterArray[rnd].threadId + '" , "sessionId": "' + afterArray[rnd].sessionId + '" ,  "uri": "/bg-middle.png" , "ip": "127.0.0.1" , "edTime": "' + startTime + '" , "status": "200" }}';
 						afterArray.splice(rnd, 1);
 
-						spdmtPushChart(data);
+						spdmtPushChart($.parseJSON(data));
 					}
 				}
 			}, 50);

@@ -40,17 +40,20 @@
 	}
 
 
-	function spdmtPushChart(data) {
+	function spdmtPushChart(json) {
+		
 		var serverNm = json.data.serverNm;
 		var threadId = json.data.threadId;
 		var sessionId = json.data.sessionId;
 		var stTime = json.data.stTime;
-		var uniqueKey = SHA1(json.data.serverNm + json.data.threadId + json.data.sessionId + json.data.uri);
+		var uniqueKey = SHA1(serverNm + threadId + sessionId + json.data.uri);
+		
 		
 		if (typeof json.data.stTime == "undefined") {
 			$("#speedStackData_" + uniqueKey).remove();
 		} else {
 			var request = '<i id="dropBall_' + uniqueKey + '" class="fa fa-circle fa-1" style="position:absolute; display:none; top:-20px;  width:5px; height:5px;"></i>';
+			$("#speedStack_" + serverNm).prepend("<div id='speedStackData_" + uniqueKey + "' class='speedStackData' start='" + json.data.stTime + "' style='display:none; background: green; width:100%; height:10px; border: 1px solid black'>&nbsp;</div>");
 			$("#spdmtMainLayout").append(request);
 			
 			// 리퀘스트 최초들어옴
@@ -89,10 +92,10 @@
 	        top: h + 30,
 	        opacity: 1
 		}, 300, function() {
-
-	   		$("#speedStack_" + serverNm).prepend("<div id='speedStackData_" + uniqueKey + "' class='speedStackData' start='" + stTime + "' style='background: green; width:100%; height:10px; border: 1px solid black'>&nbsp;</div>");
+			
+			$("#speedStackData_" + uniqueKey).show();
 	   		$dropBall.remove();
-	   		
+	   		console.log("2. uniqueKey = " + uniqueKey);
 	   		chagneColor();
 	   		
 		});
