@@ -30,8 +30,10 @@ function resTimePushChart(revData) {
 	
 	var maxVal = 0;
 	for (var i=0,size=SERVER_LIST.length; i<size; i++) {
-		if (maxVal < serverMap[SERVER_LIST[i].serverNm].resTime) {
-			maxVal = serverMap[SERVER_LIST[i].serverNm].resTime;
+		if (serverMap[SERVER_LIST[i].serverNm]) {
+			if (maxVal < serverMap[SERVER_LIST[i].serverNm].resTime) {
+				maxVal = serverMap[SERVER_LIST[i].serverNm].resTime;
+			}
 		}
 	}
 	//console.log(maxVal)
@@ -41,15 +43,17 @@ function resTimePushChart(revData) {
 		var xKey = SERVER_LIST[i].serverNm;
 		//console.log(serverMap[xKey])
 		
-		var resTime = new Number(serverMap[xKey].resTime).toFixed(2);
-		
-		var xy = {}
-		xy.x = xKey;
-		xy.y = Math.ceil((serverMap[xKey].resTime * 100 / maxVal) * (80 / 100) / 10);	// 최대값을 기준으로 백분율로 만들어서 10으로 나눔 그래프 yAxis.max=10 고려
-		xy.val = resTime;
-		//console.log("maxVal: " + maxVal + ", len: " + serverMap[xKey].length + ", period: " + period + ", xy.x: " + xy.x + ", xy.y: " + xy.y + ", resTime: " + resTime);
-
-		data.push(xy);
+		if (serverMap[xKey]) {
+			var resTime = new Number(serverMap[xKey].resTime).toFixed(2);
+			
+			var xy = {}
+			xy.x = xKey;
+			xy.y = Math.ceil((serverMap[xKey].resTime * 100 / maxVal) * (80 / 100) / 10);	// 최대값을 기준으로 백분율로 만들어서 10으로 나눔 그래프 yAxis.max=10 고려
+			xy.val = resTime;
+			//console.log("maxVal: " + maxVal + ", len: " + serverMap[xKey].length + ", period: " + period + ", xy.x: " + xy.x + ", xy.y: " + xy.y + ", resTime: " + resTime);
+	
+			data.push(xy);
+		}
 	}
 	resTimeEzbarchart.modifyData(data);
 }
