@@ -51,7 +51,7 @@ public class DataProcessVerticle extends AbstractVerticle {
 				String serverNm = (String) dataMap.get("serverNm");
 				String key 		= ((String) dataMap.get("serverNm") + (String) dataMap.get("threadId") + (String) dataMap.get("sessionId") + (String) dataMap.get("uri"));
 				
-				if (dataMap.get("stTime") != null) {	// 요청
+				if (dataMap.get("edTime") == null) {	// 요청
 					reqTimeCache.put(key, (Long) dataMap.get("stTime"));
 
 					reqResService.addReq(dataMap);

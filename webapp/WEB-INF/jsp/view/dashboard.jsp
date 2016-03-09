@@ -17,11 +17,10 @@
 			var BUS_SOCKJS_SERVER = "bus.sockjs.server";
 
 			var eb;
-			if (IS_DUMMY_DATA)	eb = new EventBus("http://localhost:9091/eventbus/");
+			if (location.href.indexOf("localhost") > -1)	eb = new EventBus("http://localhost:9091/eventbus/");
 			else				eb = new EventBus("http://192.168.110.119:9091/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
-					//console.log(msg.body)					
 
 					var revData = $.parseJSON(msg.body);//eval("(" + msg.body + ")");
 
@@ -117,7 +116,7 @@
 				}
 			}, 50);
 			 */
-			/*
+			
 			setInterval(function(){
 				if (typeof tpsPushChart == "function") {
 					var startTime = (new Date()).getTime();
@@ -138,12 +137,12 @@
 					b = b.substring(2);
 					
 					//var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\": [" + a + "],\"WS1\": [" + b + "]}}";
-					var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\":{\"resTime\":" + (Math.floor(Math.random() * 20) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 50) + 1) + ".61}, \"WS1\":{\"resTime\":" + (Math.floor(Math.random() * 50) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 20) + 1) + ".61}}}";
+					//var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\":{\"resTime\":" + (Math.floor(Math.random() * 20) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 50) + 1) + ".61}, \"WS1\":{\"resTime\":" + (Math.floor(Math.random() * 50) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 20) + 1) + ".61}}}";
+					var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WS1\":{\"resTime\":" + (Math.floor(Math.random() * 50) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 20) + 1) + ".61}}}";
 					tpsPushChart($.parseJSON(data));
 					resTimePushChart($.parseJSON(data));
 				}
 			}, 3000);
-			 */
 
 			/* setInterval(function(){
 				if (typeof dsPushChart == "function") {
