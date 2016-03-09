@@ -51,7 +51,10 @@ dependencies {
 	//compile "com.ezwel:ezwel-core-redis:$ezwelVersion"
 	//compile "com.ezwel:ezwel-core-ispn:$ezwelVersion"
 	//compile "com.ezwel:ezwel-core-rabbitmq:$ezwelVersion"
-	
+
+	compile 'org.mariadb.jdbc:mariadb-java-client:1.3.6'
+
+
 	compile  'io.vertx:vertx-web:3.2.1'
 
     compile 'org.projectlombok:lombok:1.3'

@@ -6,6 +6,7 @@
 	<script src="/resources/js/vertx/sockjs-0.3.4.js"></script>
 	<script src="/resources/js/vertx/vertx-eventbus.js"></script>
 	<script src="/resources/js/lib/sha1.js"></script>
+	<script src="/resources/js/chart/ezbarchart.js"></script>
 	
 	<script>
 		var IS_DUMMY_DATA = false;
@@ -28,7 +29,7 @@
 						if (typeof memPushChart == "function") 		memPushChart(revData);
 					} else if (revData.grp == "grp_resInfo") {
 						if (typeof tpsPushChart == "function") 		tpsPushChart(revData);
-						if (typeof resTimePushChart == "function") 		resTimePushChart(revData);
+						if (typeof resTimePushChart == "function") 	resTimePushChart(revData);
 					} else if (revData.grp == "grp_was_req") {
 						if (typeof spdmtPushChart == "function")	spdmtPushChart(revData);
 						if (typeof xViewPushChart == "function")	xViewPushChart(revData);
@@ -41,8 +42,8 @@
 				eb.publish(BUS_SOCKJS_SERVER, "aaaa");
 			}
 			//send();
-		} else {
-			setInterval(function(){
+		} else if (IS_DUMMY_DATA == true){
+			/* setInterval(function(){
 				if (typeof memPushChart == "function") {
 					var startTime = (new Date()).getTime();
 					var per = Math.floor(Math.random() * 100) + 0;
@@ -54,9 +55,9 @@
 					data = "{\"grp\": \"grp_was_mem\", \"data\": {\"serverNm\": \"WS1\", \"heapUsedPercent\": \"" + per + "\", \"heapMax\": \"31457280\", \"heapUsed\": \"21667352\", \"nonHeapUsed\": \"34733480\", \"time\": \"" + startTime + "\"}}";
 					memPushChart($.parseJSON(data));
 				}
-			}, 2000);
+			}, 2000); */
 
-			var beforeArray = [
+			/* var beforeArray = [
 			                   	{serverNm: 'WU1', threadId: '1', sessionId : "AA1"} ,
 			                   	{serverNm: 'WS1', threadId: '2', sessionId : "AA2"} ,
 			                   	{serverNm: 'WU1', threadId: '3', sessionId : "AA3"} ,
@@ -115,15 +116,34 @@
 					}
 				}
 			}, 50);
-
+			 */
+			/*
 			setInterval(function(){
 				if (typeof tpsPushChart == "function") {
 					var startTime = (new Date()).getTime();
 					var per = Math.floor(Math.random() * 50) + 0;
-					var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\":" + (Math.floor(Math.random() * 50) + 0) + ",\"WS1\":" + (Math.floor(Math.random() * 10) + 0) + "}}";
+					
+					var a = "";
+					var l = Math.floor(Math.random() * 1000) + 100;
+					for (var i=0; i<l; i++) {
+						a += ", " + (Math.floor(Math.random() * 5000) + 500);
+					}
+					a = a.substring(2);
+					
+					var b = "";
+					var l = Math.floor(Math.random() * 100) + 10;
+					for (var i=0; i<l; i++) {
+						b += ", " + (Math.floor(Math.random() * 5000) + 500);
+					}
+					b = b.substring(2);
+					
+					//var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\": [" + a + "],\"WS1\": [" + b + "]}}";
+					var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\":{\"resTime\":" + (Math.floor(Math.random() * 20) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 50) + 1) + ".61}, \"WS1\":{\"resTime\":" + (Math.floor(Math.random() * 50) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 20) + 1) + ".61}}}";
 					tpsPushChart($.parseJSON(data));
+					resTimePushChart($.parseJSON(data));
 				}
 			}, 3000);
+			 */
 
 			/* setInterval(function(){
 				if (typeof dsPushChart == "function") {
@@ -138,6 +158,7 @@
 					dsPushChart($.parseJSON(data));
 				}
 			}, 2000); */
+			
 		}
 	</script>
 

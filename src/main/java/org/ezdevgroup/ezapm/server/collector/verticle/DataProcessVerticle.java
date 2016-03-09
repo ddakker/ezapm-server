@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.ezdevgroup.ezapm.server.collector.ShareData;
+import org.ezdevgroup.ezapm.server.collector.service.ReqResService;
+import org.ezdevgroup.ezapm.server.ds.tams.ReqResMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -30,7 +32,11 @@ public class DataProcessVerticle extends AbstractVerticle {
 	
 	public static final String BUS_DATA_PROCESS_TPS = "bus.data.process.tps";
 	
-	@Resource Cache<Long> reqTimeCache;
+	@Resource
+	Cache<Long> reqTimeCache;
+
+	@Resource
+	ReqResService reqResService;
 
 	@Override
 	public void start() throws Exception {
@@ -47,6 +53,8 @@ public class DataProcessVerticle extends AbstractVerticle {
 				
 				if (dataMap.get("stTime") != null) {	// 요청
 					reqTimeCache.put(key, (Long) dataMap.get("stTime"));
+
+					reqResService.addReq(dataMap);
 				}
 				
 				if (dataMap.get("edTime") != null) {    // 요청완료
@@ -62,6 +70,9 @@ public class DataProcessVerticle extends AbstractVerticle {
 					serverResData.add(resTime);
 					
 					reqTimeCache.remove(key);
+
+					dataMap.put("resTime", resTime);
+					reqResService.modifyRes(dataMap);
 				}
 			}
 

@@ -1,11 +1,14 @@
 package org.ezdevgroup.ezapm.server.collector.job;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.Map;
+import java.util.Set;
 import java.util.TimerTask;
 
 import org.ezdevgroup.ezapm.server.collector.ShareData;
-import org.ezdevgroup.ezapm.server.collector.verticle.DataProcessVerticle;
 import org.ezdevgroup.ezapm.server.collector.verticle.SockjsVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,31 @@ public class TimerJob extends TimerTask {
     @Override
     public void run() {
         synchronized (ShareData.resMap) {
-        	String jsonStr = JsonUtils.toString(ShareData.resMap);
+        	Map<String, Map<String, Double>> dataMap = new HashMap<>();
+        	
+        	Set<String> keys = ShareData.resMap.keySet();
+        	for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
+                String key = iterator.next();
+                List<Long> resTimes = ShareData.resMap.get(key);
+                System.out.println("resTimes: " + resTimes);
+                
+                Map<String, Double> serverInfoMap = new HashMap<>();
+                if (resTimes != null) {
+	                LongSummaryStatistics stats = resTimes.stream().mapToLong((x) -> x).summaryStatistics();
+	                System.out.println("stats s: " + stats.getCount());
+	                System.out.println("stats a: " + stats.getAverage());
+	                
+	                serverInfoMap.put("tps", (stats.getCount() * 1.0) / (period / 1000));
+	                serverInfoMap.put("resTime", new Double(stats.getAverage()));
+                } else {
+                	serverInfoMap.put("tps", 0d);
+	                serverInfoMap.put("resTime", 0d);
+                }
+                
+                dataMap.put(key, serverInfoMap);
+        	}
+        	String jsonStr = JsonUtils.toString(dataMap);
+        	System.out.println("jsonStr: " + jsonStr);
             //DelayExecVerticle.tpsMap.clear();
             for (String key : ShareData.resMap.keySet()) {
             	ShareData.resMap.put(key, null);
