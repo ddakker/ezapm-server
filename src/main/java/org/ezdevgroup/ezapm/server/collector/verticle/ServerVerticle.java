@@ -27,7 +27,7 @@ public class ServerVerticle extends AbstractVerticle {
 
 					String message = buffer.toString().trim();
 
-					log.debug(socket.remoteAddress() + " (" + handlerID + ") => " + message);
+					log.info(socket.remoteAddress() + " (" + handlerID + ") => " + message);
 
 
 					/*vertx.eventBus().<String> send(DelayExecVerticle.ALL_PRODUCTS_ADDRESS, message, result -> {
