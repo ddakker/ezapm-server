@@ -1,2 +1,63 @@
 <%@page pageEncoding="UTF-8"%>
-시간당 처리량  chart
+<div id="dsDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+	<div id="chartContainer02" style="height: 100%; width: 100%;"></div>
+</div>
+<script>
+var today = new Date();
+
+function setGraph02(){
+	/* chart No. 2 */
+	var dps = []; // dataPoints
+ 
+	var chart02 = new CanvasJS.Chart("chartContainer02",{
+		axisY:{
+	        minimum: 0, 
+	        maximum: 400,
+	        viewportMinimum: -150, 
+	        viewportMaximum: 400
+		},
+		axisX:{
+	        /* viewportMinimum: 00,
+	        viewportMaximum: 24  */
+		},
+		dataPointMaxWidth: 1,
+		data: [{
+			type: "line",
+			dataPoints: dps 
+		}]
+	});
+
+	var xVal = 0;
+	var yVal = 100;	
+	var updateInterval02 = 100;
+	//var updateInterval02 = 3600000;
+	var dataLength = 1440; // number of dataPoints visible at any point
+
+	var updateChart02 = function (count) {
+		count = count || 1;
+		// count is number of times loop runs to generate random dataPoints.
+		
+		for (var j = 0; j < count; j++) {	
+			yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
+			dps.push({
+			 	x: xVal, 
+				y: yVal
+			});
+			xVal++;
+		};
+		//console.log(dps.length);
+		if (dps.length > dataLength){
+			dps.shift();				
+		}
+		
+		chart02.render();		
+
+	};
+
+	// generates first set of dataPoints
+	updateChart02(dataLength); 
+
+	// update chart after specified time. 
+	/* setInterval(function(){updateChart02()}, updateInterval02);  */
+}
+</script>
