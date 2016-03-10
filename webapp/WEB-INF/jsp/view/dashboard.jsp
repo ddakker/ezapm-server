@@ -29,6 +29,7 @@
 
 					if (revData.grp == "grp_was_mem") {
 						if (typeof memPushChart == "function") 		memPushChart(revData);
+						if (typeof dsPushChart == "function") 		dsPushChart(revData);
 					} else if (revData.grp == "grp_resInfo") {
 						if (typeof tpsPushChart == "function") 		tpsPushChart(revData);
 						if (typeof resTimePushChart == "function") 		resTimePushChart(revData);
