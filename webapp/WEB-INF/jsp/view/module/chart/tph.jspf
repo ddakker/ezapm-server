@@ -24,7 +24,7 @@ function setGraph02(){
 		data: [{
 			type: "line",
 			dataPoints: dps 
-		}]
+		}] 
 	});
 
 	var xVal = 0;
