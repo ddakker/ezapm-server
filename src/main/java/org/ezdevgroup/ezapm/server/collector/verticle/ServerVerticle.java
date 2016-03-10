@@ -46,8 +46,8 @@ public class ServerVerticle extends AbstractVerticle {
 					if (message.contains("grp_was_req")) {
 						vertx.eventBus().send(DataProcessVerticle.BUS_DATA_PROCESS_TPS, message);
 					}
-					//vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, message);
-					vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_CLIENT, message);
+					vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, message);
+					//vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_CLIENT, message);
 
 				}));
 				socket.closeHandler(v -> {
