@@ -38,7 +38,8 @@ public class ApmCollector {
         //vertx.deployVerticle(DelayExecVerticle.class.getName(), new DeploymentOptions().setWorker(true).setInstances(2));
         //vertx.deployVerticle(new SockjsVerticle());
         vertx.deployVerticle(dataProcessVerticle, new DeploymentOptions().setWorker(true));
-        vertx.deployVerticle(SockjsVerticle.class.getName(), new DeploymentOptions().setWorker(true).setInstances(2));
+        //vertx.deployVerticle(SockjsVerticle.class.getName(), new DeploymentOptions().setWorker(true).setInstances(2));
+        vertx.deployVerticle(new SockjsVerticle());
         vertx.deployVerticle(new ServerVerticle());
         //vertx.deployVerticle(new ServerVerticle2());
         
