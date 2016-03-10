@@ -25,7 +25,7 @@ function setGraph02(){
 			type: "line",
 			dataPoints: dps 
 		}]
-	});
+	}); 
 
 	var xVal = 0;
 	var yVal = 100;	
