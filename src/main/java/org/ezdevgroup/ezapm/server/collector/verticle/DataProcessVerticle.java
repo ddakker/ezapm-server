@@ -32,17 +32,15 @@ public class DataProcessVerticle extends AbstractVerticle {
 	
 	public static final String BUS_DATA_PROCESS_TPS = "bus.data.process.tps";
 	
-	@Resource
-	Cache<Long> reqTimeCache;
+	/*@Resource
+	Cache<Long> reqTimeCache;*/
 
 	@Resource
 	ReqResService reqResService;
 
 	@Override
 	public void start() throws Exception {
-		System.out.println("DataSaveVerticle reqTimeCache: " + reqTimeCache);
 		vertx.eventBus().consumer(DataProcessVerticle.BUS_DATA_PROCESS_TPS, (Message<String> message) -> {
-			System.out.println("DelayExecVerticle reqTimeCache: " + reqTimeCache);
 			String messageData = message.body();
 			Map msgMap = JsonUtils.toJson(messageData, HashMap.class);
 			Map dataMap = (Map) msgMap.get("data");
@@ -52,13 +50,11 @@ public class DataProcessVerticle extends AbstractVerticle {
 				String key 		= ((String) dataMap.get("serverNm") + (String) dataMap.get("threadId") + (String) dataMap.get("sessionId") + (String) dataMap.get("uri"));
 				
 				if (dataMap.get("edTime") == null) {	// 요청
-					reqTimeCache.put(key, (Long) dataMap.get("stTime"));
-
 					reqResService.addReq(dataMap);
 				}
 				
 				if (dataMap.get("edTime") != null) {    // 요청완료
-					Long stTime = reqTimeCache.get(key);
+					Long stTime = (Long) dataMap.get("stTime");
 					Long edTime = (Long) dataMap.get("edTime");
 					
 					Long resTime = edTime - stTime;		// 처리시간
@@ -69,7 +65,6 @@ public class DataProcessVerticle extends AbstractVerticle {
 					List<Long> serverResData = ShareData.resMap.get(serverNm);
 					serverResData.add(resTime);
 					
-					reqTimeCache.remove(key);
 
 					dataMap.put("resTime", resTime);
 					reqResService.modifyRes(dataMap);

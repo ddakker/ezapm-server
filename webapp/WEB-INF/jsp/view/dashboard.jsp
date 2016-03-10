@@ -6,8 +6,10 @@
 	<script src="/resources/js/vertx/sockjs-0.3.4.js"></script>
 	<script src="/resources/js/vertx/vertx-eventbus.js"></script>
 	<script src="/resources/js/lib/sha1.js"></script>
+	<script src="/resources/js/chart/ezbarchart.js"></script>
 	
 	<script>
+		var reqData = {};
 		var IS_DUMMY_DATA = false;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 
@@ -16,8 +18,9 @@
 			var BUS_SOCKJS_SERVER = "bus.sockjs.server";
 
 			var eb;
-			if (IS_DUMMY_DATA)	eb = new EventBus("http://localhost:9091/eventbus/");
-			else				eb = new EventBus("http://192.168.110.119:9091/eventbus/");
+			/* if (location.href.indexOf("localhost") > -1)	eb = new EventBus("http://localhost:9091/eventbus/");
+			else				eb = new EventBus("http://192.168.110.119:9091/eventbus/"); */
+			eb = new EventBus("http://192.168.110.119:9091/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
 					//console.log(msg.body)					
@@ -30,8 +33,21 @@
 						if (typeof tpsPushChart == "function") 		tpsPushChart(revData);
 						if (typeof resTimePushChart == "function") 		resTimePushChart(revData);
 					} else if (revData.grp == "grp_was_req") {
+						//console.log(msg.body)
+						/* if (!revData.data.edTime) {
+							console.log("req: " + revData.data.edTime)
+							reqData[revData.data.serverNm + revData.data.threadId + revData.data.sessionId + revData.data.uri + revData.data.stTime] = revData.data;
+						}
+						if (revData.data.edTime) {
+							console.log("res: " + revData.data.edTime)
+							var rd = reqData[revData.data.serverNm + revData.data.threadId + revData.data.sessionId + revData.data.uri + revData.data.stTime];
+							if (!rd) {
+								console.log(rd);
+								alert(rd);
+							}
+						} */
 						if (typeof spdmtPushChart == "function")	spdmtPushChart(revData);
-						if (typeof xViewPushChart == "function")	xViewPushChart(revData);
+						//if (typeof xViewPushChart == "function")	xViewPushChart(revData);
 					}
 					
 					
