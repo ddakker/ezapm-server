@@ -12,9 +12,23 @@
 		</encoder>
 	</appender>
 
+	<appender name="FILE_SOCKJS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/webroot/logs/ezapm-server/app_sockjs.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/data/webroot/logs/ezapm-server/app_sockjs.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d [%-5level] [%thread] %logger{100}[%method:%line] - %msg %n</pattern>
+		</encoder>
+	</appender>
+
 
 	<!-- Class Method 이동 경로 정보 -->
 	<logger name="com.ezwel.core.intercepter.aspect.LoggingAspect" level="DEBUG" />
+	<logger name="org.ezdevgroup.ezapm.server.collector.verticle.SockjsVerticle" level="DEBUG">
+		<appender-ref ref="FILE_SOCKJS" />
+	</logger>
 
 
 
