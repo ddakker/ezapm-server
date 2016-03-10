@@ -1,0 +1,113 @@
+<%@page pageEncoding="UTF-8"%>
+<div id="tphDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+	<div id="chartContainer01" style="height: 100%; width: 100%;"></div>
+</div>
+<script type="text/javascript" src="//canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+var dsChartData = [];
+var dsDataLength = 60;
+var dsChartYn = "N";
+var dsChart01;
+
+var dsUpdateInterval01 = 5000;
+var dsToday = new Date();
+
+function dsPushChart(revData){
+	var dsDataSize = 10;
+
+	// dataPoints & serverNames
+	if(dsChartYn == "N"){
+		for (var i=0, size=SERVER_LIST.length; i<size; i++) {
+			var data = {};
+			var dataPoints = [];
+
+			data.type = "line";
+			data.xValueType = "dateTime";
+
+			// legend Yn
+			data.showInLegend = false;
+			data.name = SERVER_LIST[i].serverNm;
+
+			console.log("serverNm : " + SERVER_LIST[i].serverNm + " recDataServerNm : " + revData.data.serverNm);
+
+			data.dataPoints = dataPoints;
+			dsChartData.push(data);
+		}
+
+		dsChart01 = new CanvasJS.Chart("chartContainer01",{
+			zoomEnabled: true,
+			toolTip: {
+				shared: true
+			},
+			dataPointMaxWidth: 4,
+			legend: {
+				verticalAlign: "top",
+				horizontalAlign: "center",
+	            fontSize: 8,
+				fontWeight: "lighter",
+				fontFamily: "calibri",
+				fontColor: "dimGrey"
+			},
+			axisY:{
+				minimum: 0,
+				maximum: 100,
+				viewportMaximum: 100,
+				stripLines:[{value:(80)}],
+				includeZero: false
+			},
+			data: dsChartData,
+	         legend:{
+	           cursor:"pointer"
+	           /*, // item click event (visible)
+	           itemclick : function(e) {
+	             if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+	               e.dataSeries.visible = false;
+	             }
+	             else {
+	               e.dataSeries.visible = true;
+	             }
+	             dsChart01.render();
+	           }  */
+	         }
+		});
+
+		dsChartYn = "Y";
+	}
+
+	var dsUdateDsChart01 = function (count) {
+		count = count || 1;
+
+		dsToday.setTime(dsToday.getTime()+ dsUpdateInterval01);
+
+		for (var i=0,size=SERVER_LIST.length; i<size; i++) {
+
+			if (dsChart01.options.data[i].name == revData.data.serverNm) {
+
+				// log
+				//if(dsChart01.options.data[i].name == "WS1"){
+				//	console.log("data[i].name: " + dsChart01.options.data[i].name + ", revData.serverNm: " + revData.data.serverNm + "   " +  revData.data.heapUsedPercent
+				//			+ "  data : " + dsChart01.options.data[i].dataPoints.length + "  length : " + dsDataLength + "  startTime : " + revData.data.time);
+				//}
+
+				dsChart01.options.data[i].dataPoints.push({
+					x: parseInt(revData.data.time),
+					y: revData.data.heapUsedPercent
+				});
+
+				if ( dsChart01.options.data[i].dataPoints.length > dsDataLength){
+					dsChart01.options.data[i].dataPoints.shift();
+				}
+
+				// chart draw
+				dsChart01.render();
+			}
+
+		}
+	};
+
+	// generates first set of dataPoints
+	dsUdateDsChart01(dsDataLength);
+
+}
+
+</script>
