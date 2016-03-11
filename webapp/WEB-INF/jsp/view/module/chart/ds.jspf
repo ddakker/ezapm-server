@@ -35,15 +35,15 @@ function dsPushChart(revData){
 
 		dsChart01 = new CanvasJS.Chart("chartContainer01",{
 			//zoomEnabled: true,
-			width:1,
+			//width:1,
 			toolTip: {
 				shared: true
 			},
-			//dataPointMaxWidth: 4,
+			dataPointMaxWidth: 1,
 			legend: {
 				verticalAlign: "top",
 				horizontalAlign: "center",
-	            fontSize: 1,
+	            fontSize: 8,
 				fontWeight: "lighter",
 				fontFamily: "calibri",
 				fontColor: "dimGrey"
