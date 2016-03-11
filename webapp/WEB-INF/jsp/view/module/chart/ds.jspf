@@ -2,7 +2,6 @@
 <div id="tphDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
 	<div id="chartContainer01" style="height: 100%; width: 100%;"></div>
 </div>
-<script type="text/javascript" src="//canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script>
 var dsChartData = [];
 var dsDataLength = 60;
@@ -35,15 +34,16 @@ function dsPushChart(revData){
 		}
 
 		dsChart01 = new CanvasJS.Chart("chartContainer01",{
-			zoomEnabled: true,
+			//zoomEnabled: true,
+			width:1,
 			toolTip: {
 				shared: true
 			},
-			dataPointMaxWidth: 4,
+			//dataPointMaxWidth: 4,
 			legend: {
 				verticalAlign: "top",
 				horizontalAlign: "center",
-	            fontSize: 8,
+	            fontSize: 1,
 				fontWeight: "lighter",
 				fontFamily: "calibri",
 				fontColor: "dimGrey"
@@ -52,7 +52,7 @@ function dsPushChart(revData){
 				minimum: 0,
 				maximum: 100,
 				viewportMaximum: 100,
-				stripLines:[{value:(80)}],
+				//stripLines:[{value:(80)}],
 				includeZero: false
 			},
 			data: dsChartData,
