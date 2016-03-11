@@ -1,15 +1,13 @@
 <%@page pageEncoding="UTF-8"%>
-<div id="tphDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
-	<div id="chartContainer01" style="height: 100%; width: 100%;"></div>
+<div id="dsDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+	<div id="dsChartContainer" style="height: 100%; width: 100%;"></div>
 </div>
 <script>
 var dsChartData = [];
 var dsDataLength = 60;
 var dsChartYn = "N";
-var dsChart01;
-
-var dsUpdateInterval01 = 5000;
-var dsToday = new Date();
+var dsChart;
+var dsUpdateInterval = 5000;
 
 function dsPushChart(revData){
 	var dsDataSize = 10;
@@ -27,13 +25,13 @@ function dsPushChart(revData){
 			data.showInLegend = false;
 			data.name = SERVER_LIST[i].serverNm;
 
-			console.log("serverNm : " + SERVER_LIST[i].serverNm + " recDataServerNm : " + revData.data.serverNm);
+			//console.log("serverNm : " + SERVER_LIST[i].serverNm + " recDataServerNm : " + revData.data.serverNm);
 
 			data.dataPoints = dataPoints;
 			dsChartData.push(data);
 		}
 
-		dsChart01 = new CanvasJS.Chart("chartContainer01",{
+		dsChart = new CanvasJS.Chart("dsChartContainer",{
 			//zoomEnabled: true,
 			//width:1,
 			toolTip: {
@@ -50,8 +48,8 @@ function dsPushChart(revData){
 			},
 			axisY:{
 				minimum: 0,
-				maximum: 100,
-				viewportMaximum: 100,
+				//maximum: 100,
+				//viewportMaximum: 100,
 				//stripLines:[{value:(80)}],
 				includeZero: false
 			},
@@ -66,7 +64,7 @@ function dsPushChart(revData){
 	             else {
 	               e.dataSeries.visible = true;
 	             }
-	             dsChart01.render();
+	             dsChart.render();
 	           }  */
 	         }
 		});
@@ -74,39 +72,37 @@ function dsPushChart(revData){
 		dsChartYn = "Y";
 	}
 
-	var dsUdateDsChart01 = function (count) {
+	var dsUdatedsChart = function (count) {
 		count = count || 1;
-
-		dsToday.setTime(dsToday.getTime()+ dsUpdateInterval01);
 
 		for (var i=0,size=SERVER_LIST.length; i<size; i++) {
 
-			if (dsChart01.options.data[i].name == revData.data.serverNm) {
+			if (dsChart.options.data[i].name == revData.data.serverNm) {
 
 				// log
-				//if(dsChart01.options.data[i].name == "WS1"){
-				//	console.log("data[i].name: " + dsChart01.options.data[i].name + ", revData.serverNm: " + revData.data.serverNm + "   " +  revData.data.heapUsedPercent
-				//			+ "  data : " + dsChart01.options.data[i].dataPoints.length + "  length : " + dsDataLength + "  startTime : " + revData.data.time);
+				//if(dsChart.options.data[i].name == "WS1"){
+				//	console.log("data[i].name: " + dsChart.options.data[i].name + ", revData.serverNm: " + revData.data.serverNm + "   " +  revData.data.heapUsedPercent
+				//			+ "  data : " + dsChart.options.data[i].dataPoints.length + "  length : " + dsDataLength + "  startTime : " + revData.data.time);
 				//}
 
-				dsChart01.options.data[i].dataPoints.push({
+				dsChart.options.data[i].dataPoints.push({
 					x: parseInt(revData.data.time),
 					y: revData.data.heapUsedPercent
 				});
 
-				if ( dsChart01.options.data[i].dataPoints.length > dsDataLength){
-					dsChart01.options.data[i].dataPoints.shift();
+				if ( dsChart.options.data[i].dataPoints.length > dsDataLength){
+					dsChart.options.data[i].dataPoints.shift();
 				}
 
 				// chart draw
-				dsChart01.render();
+				dsChart.render();
 			}
 
 		}
 	};
 
 	// generates first set of dataPoints
-	dsUdateDsChart01(dsDataLength);
+	dsUdatedsChart(dsDataLength);
 
 }
 
