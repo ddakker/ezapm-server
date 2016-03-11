@@ -7,6 +7,7 @@
 	<script src="/resources/js/vertx/vertx-eventbus.js"></script>
 	<script src="/resources/js/lib/sha1.js"></script>
 	<script src="/resources/js/chart/ezbarchart.js"></script>
+	<script src="//canvasjs.com/assets/script/canvasjs.min.js"></script>
 	
 	<script>
 		var reqData = {};
