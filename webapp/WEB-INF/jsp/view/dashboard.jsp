@@ -49,7 +49,7 @@
 							}
 						} */
 						if (typeof spdmtPushChart == "function")	spdmtPushChart(revData);
-						//if (typeof xViewPushChart == "function")	xViewPushChart(revData);
+						if (typeof xViewPushChart == "function")	xViewPushChart(revData);
 					}
 					
 					
