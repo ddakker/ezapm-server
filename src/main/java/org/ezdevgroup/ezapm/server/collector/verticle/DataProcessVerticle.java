@@ -23,7 +23,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.Message;
 
 /**
- * �뜲�씠�꽣 媛�怨� 泥섎━
+ * 데이터 가공 처리
  * @author ddakker 2016. 3. 7.
  */
 @Component
@@ -49,15 +49,15 @@ public class DataProcessVerticle extends AbstractVerticle {
 				String serverNm = (String) dataMap.get("serverNm");
 				String key 		= ((String) dataMap.get("serverNm") + (String) dataMap.get("threadId") + (String) dataMap.get("sessionId") + (String) dataMap.get("uri"));
 				
-				if (dataMap.get("edTime") == null) {	// �슂泥�
+				if (dataMap.get("edTime") == null) {	// 요청
 					reqResService.addReq(dataMap);
 				}
 				
-				if (dataMap.get("edTime") != null) {    // �슂泥��셿猷�
+				if (dataMap.get("edTime") != null) {    // 요청완료
 					Long stTime = (Long) dataMap.get("stTime");
 					Long edTime = (Long) dataMap.get("edTime");
 					
-					Long resTime = edTime - stTime;		// 泥섎━�떆媛�
+					Long resTime = edTime - stTime;		// 처리시간
 					
 					if (ShareData.resMap.get(serverNm) == null) {
 						ShareData.resMap.put(serverNm, new ArrayList<Long>());
