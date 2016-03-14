@@ -28,7 +28,7 @@ war {
         			'System-JDK': "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
         			'Build-JDK-Version': javaVersion,
         			'Gradle-Version': GradleVersion.current().getVersion(),
-        			'Created-By': 'ddakker@ezwel.com',
+        			'Created-By': 'ddakker@gmail.com',
         			'Create-Date': new Date().format('yyyy-MM-dd HH:mm:ss').toString()
     }
 }

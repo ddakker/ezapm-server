@@ -27,7 +27,7 @@ public class ServerVerticle extends AbstractVerticle {
 
 					String message = buffer.toString().trim();
 
-					log.debug(socket.remoteAddress() + " (" + handlerID + ") => " + message);
+					log.info(socket.remoteAddress() + " (" + handlerID + ") => " + message);
 
 
 					/*vertx.eventBus().<String> send(DelayExecVerticle.ALL_PRODUCTS_ADDRESS, message, result -> {
@@ -47,6 +47,7 @@ public class ServerVerticle extends AbstractVerticle {
 						vertx.eventBus().send(DataProcessVerticle.BUS_DATA_PROCESS_TPS, message);
 					}
 					vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_SERVER, message);
+					//vertx.eventBus().send(SockjsVerticle.BUS_SOCKJS_CLIENT, message);
 
 				}));
 				socket.closeHandler(v -> {

@@ -19,22 +19,22 @@ public class ReqResService {
     ReqResMapper reqResMapper;
 
     public void addReq(Map<String, Object> params) {
-        try {
+        /*try {
             if (reqResMapper.addReq(params) == 0) {
                 throw new RuntimeException("등록 갯수 0 params: " + params);
             }
         } catch (Exception e) {
             log.error("등록 실패", e);
-        }
+        }*/
     }
 
     public void modifyRes(Map<String, Object> params) {
-        try {
+        /*try {
             if (reqResMapper.modifyRes(params) == 0) {
                 throw new RuntimeException("수정 갯수 0 params: " + params);
             }
         } catch (Exception e) {
             log.error("수정 실패", e);
-        }
+        }*/
     }
 }

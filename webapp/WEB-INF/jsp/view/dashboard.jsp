@@ -10,6 +10,7 @@
 	<script src="http://rawgithub.com/highslide-software/draggable-points/master/draggable-points.js"></script>
 	
 	<script>
+		var reqData = {};
 		var IS_DUMMY_DATA = false;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
 		
@@ -18,8 +19,9 @@
 			var BUS_SOCKJS_SERVER = "bus.sockjs.server";
 
 			var eb;
-			if (IS_DUMMY_DATA)	eb = new EventBus("http://localhost:9091/eventbus/");
-			else				eb = new EventBus("http://192.168.110.119:9091/eventbus/");
+			/* if (location.href.indexOf("localhost") > -1)	eb = new EventBus("http://localhost:9091/eventbus/");
+			else				eb = new EventBus("http://192.168.110.119:9091/eventbus/"); */
+			eb = new EventBus("http://192.168.110.119:9091/eventbus/");
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
 					//console.log(msg.body)					
@@ -28,12 +30,26 @@
 
 					if (revData.grp == "grp_was_mem") {
 						if (typeof memPushChart == "function") 		memPushChart(revData);
+						if (typeof dsPushChart == "function") 		dsPushChart(revData);
 					} else if (revData.grp == "grp_resInfo") {
 						if (typeof tpsPushChart == "function") 		tpsPushChart(revData);
-						if (typeof resTimePushChart == "function") 	resTimePushChart(revData);
+						if (typeof resTimePushChart == "function") 		resTimePushChart(revData);
 					} else if (revData.grp == "grp_was_req") {
+						//console.log(msg.body)
+						/* if (!revData.data.edTime) {
+							console.log("req: " + revData.data.edTime)
+							reqData[revData.data.serverNm + revData.data.threadId + revData.data.sessionId + revData.data.uri + revData.data.stTime] = revData.data;
+						}
+						if (revData.data.edTime) {
+							console.log("res: " + revData.data.edTime)
+							var rd = reqData[revData.data.serverNm + revData.data.threadId + revData.data.sessionId + revData.data.uri + revData.data.stTime];
+							if (!rd) {
+								console.log(rd);
+								alert(rd);
+							}
+						} */
 						if (typeof spdmtPushChart == "function")	spdmtPushChart(revData);
-						if (typeof xViewPushChart == "function")	xViewPushChart(revData);
+						//if (typeof xViewPushChart == "function")	xViewPushChart(revData);
 					}
 					
 					
@@ -43,8 +59,8 @@
 				eb.publish(BUS_SOCKJS_SERVER, "aaaa");
 			}
 			//send();
-		} else if (IS_DUMMY_DATA == true){
-			/* setInterval(function(){
+		} else {
+			setInterval(function(){
 				if (typeof memPushChart == "function") {
 					var startTime = (new Date()).getTime();
 					var per = Math.floor(Math.random() * 100) + 0;
@@ -56,9 +72,9 @@
 					data = "{\"grp\": \"grp_was_mem\", \"data\": {\"serverNm\": \"WS1\", \"heapUsedPercent\": \"" + per + "\", \"heapMax\": \"31457280\", \"heapUsed\": \"21667352\", \"nonHeapUsed\": \"34733480\", \"time\": \"" + startTime + "\"}}";
 					memPushChart($.parseJSON(data));
 				}
-			}, 2000); */
+			}, 2000);
 
-			/* var beforeArray = [
+			/*var beforeArray = [
 			                   	{serverNm: 'WU1', threadId: '1', sessionId : "AA1"} ,
 			                   	{serverNm: 'WS1', threadId: '2', sessionId : "AA2"} ,
 			                   	{serverNm: 'WU1', threadId: '3', sessionId : "AA3"} ,
@@ -117,34 +133,17 @@
 					}
 				}
 			}, 50);
-			 */
-			/*
+			*/
+            /*
 			setInterval(function(){
 				if (typeof tpsPushChart == "function") {
 					var startTime = (new Date()).getTime();
 					var per = Math.floor(Math.random() * 50) + 0;
-					
-					var a = "";
-					var l = Math.floor(Math.random() * 1000) + 100;
-					for (var i=0; i<l; i++) {
-						a += ", " + (Math.floor(Math.random() * 5000) + 500);
-					}
-					a = a.substring(2);
-					
-					var b = "";
-					var l = Math.floor(Math.random() * 100) + 10;
-					for (var i=0; i<l; i++) {
-						b += ", " + (Math.floor(Math.random() * 5000) + 500);
-					}
-					b = b.substring(2);
-					
-					//var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\": [" + a + "],\"WS1\": [" + b + "]}}";
-					var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\":{\"resTime\":" + (Math.floor(Math.random() * 20) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 50) + 1) + ".61}, \"WS1\":{\"resTime\":" + (Math.floor(Math.random() * 50) + 1) + ".125,\"tps\":" + (Math.floor(Math.random() * 20) + 1) + ".61}}}";
+					var data = "{\"grp\": \"grp_tps\", \"period\": \"5000\", \"data\":{\"WU1\":" + (Math.floor(Math.random() * 50) + 0) + ",\"WS1\":" + (Math.floor(Math.random() * 10) + 0) + "}}";
 					tpsPushChart($.parseJSON(data));
-					resTimePushChart($.parseJSON(data));
 				}
 			}, 3000);
-			 */
+			*/
 
 			/* setInterval(function(){
 				if (typeof dsPushChart == "function") {
@@ -159,7 +158,6 @@
 					dsPushChart($.parseJSON(data));
 				}
 			}, 2000); */
-			
 		}
 	</script>
 

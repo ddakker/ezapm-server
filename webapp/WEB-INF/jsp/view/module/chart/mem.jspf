@@ -1,180 +1,108 @@
 <%@page pageEncoding="UTF-8"%>
-
-
-<div id="memDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">empty</div>
+<div id="memDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+	<div id="memChartContainer" style="height: 100%; width: 100%;"></div>
+</div>
 <script>
-/* for (var i=-5; i<0; i++) {
-	dataaaa.push({x: ((new Date()).getTime() + (i*1000)), y: 0});
-
-} */
-var abcd =0;
 var memChartData = [];
-function memPushChart(revObj) {
-	//console.log(data)
-	//initChartMem(data);
-	if ($('#memDivChart').highcharts() == undefined) {
-		//memInitChart(data[0].data.length);
-		memInitChart(10);
+var memDataLength = 60;
+var memChartYn = "N";
+var memChart01;
+var memUpdateInterval = 5000;
 
-		setInterval(function(){
-			$('#memDivChart').highcharts().redraw();
-		}, 1000);
-	} else {
-		/*for (var i=0,size=data.length; i<size; i++) {
-			$('#memDivChart').highcharts().series[i].setData(data[i].data, false);
+function memPushChart(revData){
+	var memDataSize = 10;
+
+	// dataPoints & serverNames
+	if(memChartYn == "N"){
+		for (var i=0, size=SERVER_LIST.length; i<size; i++) {
+			var data = {};
+			var dataPoints = [];
+
+			data.type = "line";
+			data.xValueType = "dateTime";
+
+			// legend Yn
+			data.showInLegend = false;
+			data.name = SERVER_LIST[i].serverNm;
+
+			// console.log("serverNm : " + SERVER_LIST[i].serverNm + " recDataServerNm : " + revData.data.serverNm);
+
+			data.dataPoints = dataPoints;
+			memChartData.push(data);
 		}
-		$('#memDivChart').highcharts().redraw(); */
-		//console.log(revObj)
-		for (var i=0,size=memChartData.length; i<size; i++) {
-			var sData = memChartData[i];
 
-			//console.log("sData.name: " + sData.name + ", revObj.serverNm: " + revObj.data.serverNm)
-			if (sData.name == revObj.data.serverNm) {
-				sData.data.shift();
-				sData.data.push({x: parseInt(revObj.data.time), y: revObj.data.heapUsedPercent});
+		memChart01 = new CanvasJS.Chart("memChartContainer",{
+			//zoomEnabled: true,
+			toolTip: {
+				shared: true
+			},
+			dataPointMaxWidth: 1,
+			legend: {
+				verticalAlign: "top",
+				horizontalAlign: "center",
+	            fontSize: 8,
+				fontWeight: "lighter",
+				fontFamily: "calibri",
+				fontColor: "dimGrey"
+			},
+			axisY:{
+				minimum: 0,
+				maximum: 100,
+				viewportMaximum: 100,
+				//stripLines:[{value:(80)}],
+				includeZero: false
+			},
+			data: memChartData,
+	         legend:{
+	           cursor:"pointer"
+	           /*, // item click event (visible)
+	           itemclick : function(e) {
+	             if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+	               e.dataSeries.visible = false;
+	             }
+	             else {
+	               e.dataSeries.visible = true;
+	             }
+	             memChart01.render();
+	           }  */
+	         }
+		});
 
-				//$('#memDivChart').highcharts().series[i].setData(sData.data, false);
-				$('#memDivChart').highcharts().series[i].addPoint([parseInt(revObj.data.time), parseInt(revObj.data.heapUsedPercent)], false, true);
-				//console.log(sData.data[sData.data.length-2].x)
-				//$('#memDivChart').highcharts().series[i].addPoint({x: sData.data[sData.data.length-2].x + 1, y: parseInt(revObj.data.heapUsedPercent), time: parseInt(revObj.data.time)}, false, true);
+		memChartYn = "Y";
+	}
+
+	var memUdatememChart = function (count) {
+		count = count || 1;
+
+		for (var i=0,size=SERVER_LIST.length; i<size; i++) {
+
+			if (memChart01.options.data[i].name == revData.data.serverNm) {
+
+				// log
+				//if(memChart01.options.data[i].name == "WS1"){
+				//	console.log("data[i].name: " + memChart01.options.data[i].name + ", revData.serverNm: " + revData.data.serverNm + "   " +  revData.data.heapUsedPercent
+				//			+ "  data : " + memChart01.options.data[i].dataPoints.length + "  length : " + memDataLength + "  startTime : " + revData.data.time);
+				//}
+
+				memChart01.options.data[i].dataPoints.push({
+					x: parseInt(revData.data.time),
+					y: revData.data.heapUsedPercent
+				});
+
+				if ( memChart01.options.data[i].dataPoints.length > memDataLength){
+					memChart01.options.data[i].dataPoints.shift();
+				}
+
+				// chart draw
+				memChart01.render();
 			}
+
 		}
+	};
 
+	// generates first set of dataPoints
+	memUdatememChart(memDataLength);
 
-	}
 }
-function memInitChart(dataSize) {
-	var startTime = (new Date()).getTime();
-	for (var i=0,size=SERVER_LIST.length; i<size; i++) {
-		var server = {}
-		server.name = SERVER_LIST[i].serverNm;
-		server.data = [];
 
-		for (var j=dataSize*-1; j<0; j++) {
-			server.data.push({x: startTime+(j*1000), y: 0, time: startTime});
-			//server.data.push({x: j, y: 0, time: startTime});
-		}
-		memChartData.push(server);
-	}
-
-
-       //data = data1;
-	Highcharts.setOptions({
-           global: {
-               useUTC: false
-           }
-       });
-	$('#memDivChart').highcharts({
-		chart: {
-            type: 'spline',
-            animation: Highcharts.svg, // don't animate in old IE
-            marginRight: 10,
-            /* events: {
-                load: function () {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    setInterval(function () {
-                        var x = (new Date()).getTime(), // current time
-                        	CU1 = Math.floor(Math.random() * 100) + 0,
-                        	WS1 = Math.floor(Math.random() * 100) + 0;
-                        var seriesData = {}
-                        seriesData.CU1 = CU1;
-                        seriesData.WS1 = WS1;
-                        series.addPoint([x, seriesData], true, true);
-                    }, 1000);
-                }
-            } */
-        },
-        title: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime',
-            //type: 'linear',
-            tickPixelInterval: 100/* ,
-            labels: {
-            	formatter: function() {
-            		return this.value;
-            	}
-            } */
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-            min: 0,
-            max: 100,
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        tooltip: {
-            formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' + 
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.time) + '<br/>' +
-                    Highcharts.numberFormat(this.y, 2);
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        exporting: {
-            enabled: false
-        },
-        plotOptions: {
-            spline: {
-                lineWidth: 1,
-                states: {
-                    hover: {
-                        lineWidth: 2
-                    }
-                },
-                marker: {
-                    enabled: false
-                }
-            }
-        },
-        //series: series
-        series: memChartData
-        /* series: [{
-		            name: 'WU1',
-		            data: [{x: 4370774346036000, y: 30}, 
-		                   {x: 4370774346037000, y: 80},
-		                   {x: 4370774346038000, y: 10},
-		                   {x: 4370774346039000, y: 0},
-		                   {x: 4370774346040000, y: 50}]
-		          },
-		          {
-		              name: 'WS1',
-		              data: [{x: 4370774346036000, y: 30}, 
-		                     {x: 4370774346037000, y: 80},
-		                     {x: 4370774346038000, y: 10},
-		                     {x: 4370774346039000, y: 0},
-		                     {x: 4370774346040000, y: 50}]
-           }] */
-           /* series: [{
-            name: 'WU1',
-            data: []
-          },
-          {
-              name: 'WS1',
-              data: []
-   			}] */
-           //data: seriesData
-       });
-       //console.log(chartMemOpt)
-    /* setInterval(function () {
-    	data.push({
-               x: (new Date()).getTime() * 1000,
-               y: Math.floor(Math.random() * 100) + 0
-           });
-    	console.log(data.length)
-    }, 1000); */
-    
-	
-}
-	
 </script>

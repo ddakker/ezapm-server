@@ -1,0 +1,109 @@
+<%@page pageEncoding="UTF-8"%>
+<div id="dsDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+	<div id="dsChartContainer" style="height: 100%; width: 100%;"></div>
+</div>
+<script>
+var dsChartData = [];
+var dsDataLength = 60;
+var dsChartYn = "N";
+var dsChart;
+var dsUpdateInterval = 5000;
+
+function dsPushChart(revData){
+	var dsDataSize = 10;
+
+	// dataPoints & serverNames
+	if(dsChartYn == "N"){
+		for (var i=0, size=SERVER_LIST.length; i<size; i++) {
+			var data = {};
+			var dataPoints = [];
+
+			data.type = "line";
+			data.xValueType = "dateTime";
+
+			// legend Yn
+			data.showInLegend = false;
+			data.name = SERVER_LIST[i].serverNm;
+
+			//console.log("serverNm : " + SERVER_LIST[i].serverNm + " recDataServerNm : " + revData.data.serverNm);
+
+			data.dataPoints = dataPoints;
+			dsChartData.push(data);
+		}
+
+		dsChart = new CanvasJS.Chart("dsChartContainer",{
+			//zoomEnabled: true,
+			//width:1,
+			toolTip: {
+				shared: true
+			},
+			dataPointMaxWidth: 1,
+			legend: {
+				verticalAlign: "top",
+				horizontalAlign: "center",
+	            fontSize: 8,
+				fontWeight: "lighter",
+				fontFamily: "calibri",
+				fontColor: "dimGrey"
+			},
+			axisY:{
+				minimum: 0,
+				//maximum: 100,
+				//viewportMaximum: 100,
+				//stripLines:[{value:(80)}],
+				includeZero: false
+			},
+			data: dsChartData,
+	         legend:{
+	           cursor:"pointer"
+	           /*, // item click event (visible)
+	           itemclick : function(e) {
+	             if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+	               e.dataSeries.visible = false;
+	             }
+	             else {
+	               e.dataSeries.visible = true;
+	             }
+	             dsChart.render();
+	           }  */
+	         }
+		});
+
+		dsChartYn = "Y";
+	}
+
+	var dsUdatedsChart = function (count) {
+		count = count || 1;
+
+		for (var i=0,size=SERVER_LIST.length; i<size; i++) {
+
+			if (dsChart.options.data[i].name == revData.data.serverNm) {
+
+				// log
+				//if(dsChart.options.data[i].name == "WS1"){
+				//	console.log("data[i].name: " + dsChart.options.data[i].name + ", revData.serverNm: " + revData.data.serverNm + "   " +  revData.data.heapUsedPercent
+				//			+ "  data : " + dsChart.options.data[i].dataPoints.length + "  length : " + dsDataLength + "  startTime : " + revData.data.time);
+				//}
+
+				dsChart.options.data[i].dataPoints.push({
+					x: parseInt(revData.data.time),
+					y: revData.data.heapUsedPercent
+				});
+
+				if ( dsChart.options.data[i].dataPoints.length > dsDataLength){
+					dsChart.options.data[i].dataPoints.shift();
+				}
+
+				// chart draw
+				dsChart.render();
+			}
+
+		}
+	};
+
+	// generates first set of dataPoints
+	dsUdatedsChart(dsDataLength);
+
+}
+
+</script>

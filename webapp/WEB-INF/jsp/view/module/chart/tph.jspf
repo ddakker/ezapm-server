@@ -1,2 +1,60 @@
 <%@page pageEncoding="UTF-8"%>
-시간당 처리량  chart
+<div id="tphDivChart" style="min-width: 100%; height: 100%; margin: 0 auto">
+	<div id="tphChartContainer" style="height: 100%; width: 100%;"></div>
+</div>
+<script type="text/javascript">
+$(function () {
+    $('#tphChartContainer').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
+        xAxis: [{
+            categories: ['00', '01', '02', '03', '04', '05',
+		                '06', '07', '08', '09', '10', '11',
+		                '12', '13', '14', '15', '16', '17',
+		                '18', '19', '20', '21', '22', '23'],
+            crosshair: true
+        }],
+        title: {
+       		text: ""
+      	},
+        yAxis: [{
+        	visible : true,
+        	title : "",
+        	min : 0,
+        	max : 100
+        }, {
+        	visible : false
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+        	enabled: false
+        },
+        series: [{
+        	name: '전일',
+            type: 'column',
+            yAxis: 1,
+            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0,
+                   135.6, 148.5, 216.4, 194.1, 95.6, 54.4,
+                   49.9, 71.5, 106.4, 129.2, 144.0, 176.0,
+                   135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            tooltip: {
+                valueSuffix: ' mm'
+            }
+
+        }, {
+        	name: '금일',
+            type: 'spline',
+            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5,
+                   25.2, 26.5, 23.3, 18.3, 13.9, 9.6,
+                   7.0, 6.9, 9.5, 14.5, 18.2, 21.5,
+                   25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+            tooltip: {
+                valueSuffix: '°C'
+            }
+        }]
+    });
+});
+  </script>
