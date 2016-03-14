@@ -33,9 +33,9 @@ public class ApplicationContext {
         if (dataSource == null) {
             System.err.println("========== DATASOURCE NULL ==========");
         } else {
-            /*// Local Ïùº Í≤ΩÏö∞ Log4Jdbc Î∞è Ï†ïÎ†¨ Result Table Î≥¥Í∏∞(log4jdbcRemi) ÏÑ§Ï†ï
+            /*// Local ?ùº Í≤ΩÏö∞ Log4Jdbc Î∞? ?†ï?†¨ Result Table Î≥¥Í∏∞(log4jdbcRemi) ?Ñ§?†ï
             if (GlobalsProperties.LOCAL.equals(serverType) || GlobalsProperties.DEV.equals(serverType)) {
-                System.out.println("========== Log4Jdbc & log4jdbcRemi ÏÑ§Ï†ï ==========");
+                System.out.println("========== Log4Jdbc & log4jdbcRemi ?Ñ§?†ï ==========");
                 try {
                     Log4JdbcCustomFormatter log4JdbcCustomFormatter = new Log4JdbcCustomFormatter();
                     log4JdbcCustomFormatter.setLoggingType(LoggingType.MULTI_LINE);

@@ -42,8 +42,6 @@
 
 
 	function spdmtPushChart(json) {
-		//var abc = json.data.serverNm + json.data.threadId + json.data.sessionId + json.data.edTime;
-		//console.log("----------" + json.data.serverNm + json.data.threadId + json.data.sessionId + json.data.uri + "(" + json.data.stTime + "|||" + json.data.edTime + ")<br>");
 		
 		var serverNm = json.data.serverNm;
 		var threadId = json.data.threadId;

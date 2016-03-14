@@ -23,7 +23,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.Message;
 
 /**
- * ë°ì´í„° ê°€ê³µ ì²˜ë¦¬
+ * ?°?´?„° ê°?ê³? ì²˜ë¦¬
  * @author ddakker 2016. 3. 7.
  */
 @Component
@@ -51,17 +51,17 @@ public class DataProcessVerticle extends AbstractVerticle {
 				String serverNm = (String) dataMap.get("serverNm");
 				String key 		= ((String) dataMap.get("serverNm") + (String) dataMap.get("threadId") + (String) dataMap.get("sessionId") + (String) dataMap.get("uri"));
 				
-				if (dataMap.get("stTime") != null) {	// ìš”ì²­
+				if (dataMap.get("stTime") != null) {	// ?š”ì²?
 					reqTimeCache.put(key, (Long) dataMap.get("stTime"));
 
 					reqResService.addReq(dataMap);
 				}
 				
-				if (dataMap.get("edTime") != null) {    // ìš”ì²­ì™„ë£Œ
+				if (dataMap.get("edTime") != null) {    // ?š”ì²??™„ë£?
 					Long stTime = reqTimeCache.get(key);
 					Long edTime = (Long) dataMap.get("edTime");
 					
-					Long resTime = edTime - stTime;		// ì²˜ë¦¬ì‹œê°„
+					Long resTime = edTime - stTime;		// ì²˜ë¦¬?‹œê°?
 					
 					if (ShareData.resMap.get(serverNm) == null) {
 						ShareData.resMap.put(serverNm, new ArrayList<Long>());

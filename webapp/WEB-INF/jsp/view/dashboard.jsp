@@ -7,11 +7,12 @@
 	<script src="/resources/js/vertx/vertx-eventbus.js"></script>
 	<script src="/resources/js/lib/sha1.js"></script>
 	<script src="/resources/js/chart/ezbarchart.js"></script>
+	<script src="http://rawgithub.com/highslide-software/draggable-points/master/draggable-points.js"></script>
 	
 	<script>
 		var IS_DUMMY_DATA = false;
 		var SERVER_LIST = [{serverNm: 'WU1', grpNm: 'WU'}, {serverNm: 'WS1', grpNm: 'WS'}]
-
+		
 		if (IS_DUMMY_DATA == false) {
 			var BUS_SOCKJS_CLIENT = "bus.sockjs.client";
 			var BUS_SOCKJS_SERVER = "bus.sockjs.server";
@@ -22,7 +23,7 @@
 			eb.onopen = function() {
 				eb.registerHandler(BUS_SOCKJS_CLIENT, function(err, msg) {
 					//console.log(msg.body)					
-
+					
 					var revData = $.parseJSON(msg.body);//eval("(" + msg.body + ")");
 
 					if (revData.grp == "grp_was_mem") {
